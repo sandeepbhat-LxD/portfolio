@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network Administration Lesson</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Mockup of an authoring-tool e-learning lesson: course outline on the left, continuous scrolling lesson on the right.
+   Palette: deep indigo and signal-teal on cool grey. Type: Space Grotesk headings, Inter body. */
+:root{--bg:#eef1f7;--surface:#fff;--ink:#18213a;--muted:#55607a;--line:#d6dcea;--brand:#2b3a8c;--brand-d:#1f2c6d;--brand-soft:#e4e8fa;--teal:#0e9aa7;--teal-soft:#d9f2f4;--amber:#c98a1a;--amber-soft:#fbf0d8;--ok:#1f7a4d;--ok-soft:#dff3e8;--bad:#a63a2a;--bad-soft:#f8e3df;--side:#1f2c6d;--side-ink:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10152a;--surface:#182040;--ink:#e8ecfa;--muted:#a3adca;--line:#2e3968;--brand:#8fa0ff;--brand-d:#b4c0ff;--brand-soft:#252f62;--teal:#45c8d4;--teal-soft:#163e48;--amber:#e3ae4a;--amber-soft:#3a3016;--ok:#5cc58f;--ok-soft:#173a2a;--bad:#ef8b7a;--bad-soft:#44201b;--side:#0b1030;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10152a;--surface:#182040;--ink:#e8ecfa;--muted:#a3adca;--line:#2e3968;--brand:#8fa0ff;--brand-d:#b4c0ff;--brand-soft:#252f62;--teal:#45c8d4;--teal-soft:#163e48;--amber:#e3ae4a;--amber-soft:#3a3016;--ok:#5cc58f;--ok-soft:#173a2a;--bad:#ef8b7a;--bad-soft:#44201b;--side:#0b1030;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 Inter,system-ui,sans-serif;margin:0}
+h1,h2,h3,h4{font-family:'Space Grotesk',Inter,sans-serif;line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0 0 1em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;overflow:auto;background:var(--surface);border-right:1px solid var(--line)}
+.brand{background:var(--side);color:var(--side-ink);padding:26px 22px 20px}
+.brand small{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-bottom:8px}
+.brand h2{font-size:21px}
+.prog{margin-top:16px;font-size:13px;font-weight:600}
+.bar{height:6px;background:rgba(255,255,255,.28);border-radius:3px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .4s}
+.nav{padding:10px 8px 24px;margin:0;list-style:none}
+.nav a{display:flex;gap:12px;padding:10px 14px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.35}
+.nav a:hover,.nav a[aria-current="true"]{background:var(--brand-soft)}
+.nav a[aria-current="true"]{font-weight:600}
+.dot{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center;font-size:11px;color:#fff}
+.seen .dot{background:var(--ok);border-color:var(--ok)}
+.seen .dot::after{content:"\2713"}
+main{min-width:0}
+.sec{padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.col{max-width:880px;margin:0 auto;padding:56px 0 8px}
+.hero{background:linear-gradient(120deg,var(--surface) 0 56%,var(--brand-soft) 56%);border-bottom:1px solid var(--line)}
+.hero .col{max-width:1100px;padding:88px 0 80px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:center}
+.hero h1{font-size:clamp(32px,5vw,54px)}
+.hero p.lede{color:var(--muted);font-size:19px;margin:18px 0 26px;max-width:34ch}
+.tag{display:inline-block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--brand);margin-bottom:12px}
+.btn{background:var(--brand);color:var(--surface);border:0;border-radius:999px;padding:13px 28px;font-weight:600;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--brand-d)}
+.lh{background:var(--surface);border-bottom:1px solid var(--line)}
+.lh .col{padding:68px 0 44px}
+.lh h2{font-size:clamp(28px,4vw,40px)}
+.lh .rule{width:60px;height:4px;background:var(--teal);margin:24px 0}
+.lh p.big{font-size:20px;color:var(--muted);max-width:46ch;margin:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px}
+.blk{margin:34px 0}
+.blk>h3{font-size:24px;margin-bottom:14px}
+.label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:8px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:30px;align-items:center}
+.split h3{font-size:23px;margin-bottom:10px}
+ul.ob{padding-left:20px;margin:0 0 1em}ul.ob li{margin-bottom:.45em}
+.fig{margin:0}
+.fig svg{display:block;width:100%;height:auto;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.fig figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.stmt{background:var(--brand);color:#fff;border-radius:14px;padding:40px 36px;font:500 clamp(22px,3vw,30px)/1.3 'Space Grotesk',sans-serif;text-wrap:balance}
+:root[data-theme="dark"] .stmt{color:#10152a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stmt{color:#10152a}}
+.stmt small{display:block;font:600 12px Inter;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-bottom:10px}
+/* process block */
+.proc{list-style:none;margin:0;padding:0;counter-reset:s;position:relative}
+.proc li{counter-increment:s;position:relative;padding:0 0 26px 64px}
+.proc li::before{content:counter(s);position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;background:var(--brand);color:var(--surface);display:grid;place-items:center;font:700 18px 'Space Grotesk'}
+.proc li::after{content:"";position:absolute;left:21px;top:48px;bottom:4px;width:2px;background:var(--line)}
+.proc li:last-child{padding-bottom:0}.proc li:last-child::after{display:none}
+.proc h4{font-size:18px;margin:6px 0 4px}.proc p{margin:0;color:var(--muted);font-size:16px}
+/* accordion */
+.acc{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.acc h4{margin:0}
+.acc button.ah{width:100%;text-align:left;background:transparent;border:0;border-top:1px solid var(--line);padding:17px 20px;display:flex;justify-content:space-between;align-items:center;gap:14px;font:600 17px Inter}
+.acc div:first-child>h4>button{border-top:0}
+.acc button.ah:hover{background:var(--brand-soft)}
+.acc .pl{flex:none;width:22px;height:22px;position:relative}
+.acc .pl::before,.acc .pl::after{content:"";position:absolute;background:var(--brand);left:3px;right:3px;top:10px;height:2px;transition:transform .2s}
+.acc .pl::after{transform:rotate(90deg)}
+.acc button[aria-expanded="true"] .pl::after{transform:rotate(0)}
+.acc .ap{padding:2px 20px 20px;color:var(--muted)}
+.acc .ap p:last-child{margin:0}
+/* flip cards */
+.flips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.flip{perspective:900px;background:none;border:0;padding:0;height:250px;width:100%;display:block;text-align:left}
+.fi{display:block;position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip[aria-pressed="true"] .fi{transform:rotateY(180deg)}
+.ff,.fb{position:absolute;inset:0;border-radius:14px;padding:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+.ff{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--teal)}
+.ff h4{font-size:20px;margin-bottom:8px}.ff span{color:var(--muted);font-size:15px}
+.ff em{margin-top:14px;font-style:normal;font-size:13px;font-weight:700;color:var(--brand)}
+.fb{background:var(--brand);color:var(--surface);transform:rotateY(180deg);font-size:15.5px}
+.fb b{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;margin:0 0 4px}
+.fb p{margin:0 0 10px}.fb p:last-child{margin:0}
+/* tabs */
+.tabs{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tl{display:flex;flex-wrap:wrap;background:var(--brand-soft);border-bottom:1px solid var(--line)}
+.tl button{flex:1 1 140px;border:0;background:transparent;padding:15px 12px;font-weight:600;border-bottom:3px solid transparent;color:var(--muted)}
+.tl button[aria-selected="true"]{background:var(--surface);color:var(--brand);border-bottom-color:var(--teal)}
+.tp{padding:24px}.tp h4{font-size:21px;margin-bottom:8px}
+.tp ul{padding-left:20px;margin:0}
+.chip{display:inline-block;background:var(--teal-soft);color:var(--ink);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600;margin:0 6px 6px 0}
+/* quiz */
+.q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:18px}
+.q h4{font-size:19px;margin-bottom:14px;font-family:Inter;font-weight:600;line-height:1.4}
+.opt{display:block;width:100%;text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px}
+.opt:hover:not([disabled]){border-color:var(--brand)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fbk{margin-top:6px;padding:12px 14px;border-radius:10px;font-size:15.5px}
+.fbk.ok{background:var(--ok-soft)}.fbk.no{background:var(--bad-soft)}
+.score{margin:6px 0 0;font:700 20px 'Space Grotesk'}
+.take{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.take .card{border-top:5px solid var(--teal)}.take h4{font-size:18px;margin-bottom:6px}.take p{margin:0;color:var(--muted);font-size:15.5px}
+.cont{text-align:center;padding:30px 0 70px}
+.note{font-size:13px;color:var(--muted);text-align:center;padding:0 0 40px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.hero .col,.split,.flips,.take{grid-template-columns:1fr}.hero{background:var(--surface)}.hero .col{padding:56px 0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+<!-- shared topology picture, cloned into the image slots -->
+<template id="topo"><svg viewBox="0 0 640 400" role="img" aria-label="Diagram of a small office network: internet, firewall and router, a core switch, a wireless access point, a file server and four user devices">
+<defs><style>.l{stroke:#8793b8;stroke-width:2.5;fill:none}.n{fill:#fff;stroke:#2b3a8c;stroke-width:2.5}.t{font:600 13px Inter,sans-serif;fill:#18213a;text-anchor:middle}.s{font:500 11px Inter,sans-serif;fill:#55607a;text-anchor:middle}</style></defs>
+<rect width="640" height="400" fill="#f4f6fc"/>
+<path class="l" d="M320 78V122M320 178V214M320 270 140 318M320 270 260 318M320 270 380 318M320 270 500 318M320 214H520V150"/>
+<ellipse class="n" cx="320" cy="46" rx="86" ry="32" fill="#d9f2f4"/><text class="t" x="320" y="51">Internet</text>
+<rect class="n" x="250" y="122" width="140" height="56" rx="10" fill="#fbf0d8"/><text class="t" x="320" y="146">Firewall + router</text><text class="s" x="320" y="164">192.168.10.1</text>
+<rect class="n" x="250" y="214" width="140" height="56" rx="10" fill="#e4e8fa"/><text class="t" x="320" y="238">Core switch</text><text class="s" x="320" y="256">24 ports</text>
+<rect class="n" x="450" y="94" width="140" height="56" rx="10"/><text class="t" x="520" y="118">Wi-Fi access point</text><text class="s" x="520" y="136">SSID: Office</text>
+<rect class="n" x="80" y="318" width="120" height="54" rx="10"/><text class="t" x="140" y="342">Reception PC</text><text class="s" x="140" y="360">DHCP .21</text>
+<rect class="n" x="200" y="318" width="120" height="54" rx="10"/><text class="t" x="260" y="342">Finance PC</text><text class="s" x="260" y="360">DHCP .34</text>
+<rect class="n" x="320" y="318" width="120" height="54" rx="10" fill="#d9f2f4"/><text class="t" x="380" y="342">File server</text><text class="s" x="380" y="360">Static .5</text>
+<rect class="n" x="440" y="318" width="120" height="54" rx="10"/><text class="t" x="500" y="342">Printer</text><text class="s" x="500" y="360">Static .9</text>
+</svg></template>
+
+<div class="app">
+<aside class="side" aria-label="Course outline">
+ <div class="brand"><small>Network Administration</small><h2>Keeping a Small Office Network Healthy</h2>
+  <div class="prog"><span id="pt">0% complete</span><div class="bar"><i id="pb"></i></div></div></div>
+ <ul class="nav" id="nav">
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#s1">1. How the network works</a></li>
+  <li><a href="#s2">2. Fix, secure and maintain</a></li>
+  <li><a href="#kc">Knowledge check</a></li>
+  <li><a href="#sum">Summary</a></li>
+ </ul>
+</aside>
+<main>
+
+<section id="intro" class="sec hero"><div class="col">
+ <div><span class="tag">Course 1 · Lesson 1</span><h1>Keeping a small office network healthy</h1>
+ <p class="lede">What every new network administrator should know in the first week on the job.</p>
+ <a class="btn" href="#s1">Start lesson</a></div>
+ <figure class="fig" data-topo><figcaption>A typical small-office network. Fictional example.</figcaption></figure>
+</div></section>
+<section class="sec"><div class="col">
+ <div class="blk"><div class="split">
+  <div><span class="tag">Introduction</span><h3>Why this lesson matters</h3>
+   <p>When the network is healthy nobody notices it. When it fails, the whole office stops: no email, no shared files, no printing. Administrators are the people who keep it quiet.</p>
+   <p>In about 20 minutes you will learn how the parts fit together and a repeatable way to find faults.</p></div>
+  <div class="card"><div class="label">By the end you will be able to</div>
+   <ul class="ob"><li>Name the job of a switch, router, firewall, DHCP and DNS</li><li>Trace how a request travels from a laptop to the internet</li><li>Troubleshoot a fault from the bottom layer up</li><li>Apply four routine habits that prevent most outages</li></ul></div>
+ </div></div>
+</div></section>
+
+<section id="s1" class="sec lh"><div class="col"><span class="tag">Section 1</span><h2>How the network works</h2><div class="rule"></div><p class="big">Before you can fix a network you need a clear picture of what each device does and what happens when someone opens a web page.</p></div></section>
+<section class="sec"><div class="col">
+ <div class="blk"><div class="stmt"><small>Key idea</small>Every network problem is a break somewhere along a path. Know the path and you know where to look.</div></div>
+ <div class="blk"><h3>The core components</h3>
+  <div class="acc" id="acc1">
+   <div><h4><button class="ah" type="button" aria-expanded="true" aria-controls="a1">Switch<span class="pl"></span></button></h4><div class="ap" id="a1"><p>Connects the devices inside the office. It learns which device sits on which port and sends each frame only where it needs to go. It works with MAC addresses and does not leave the local network.</p></div></div>
+   <div><h4><button class="ah" type="button" aria-expanded="false" aria-controls="a2">Router<span class="pl"></span></button></h4><div class="ap" id="a2" hidden><p>Connects the office network to other networks, including the internet. It reads the destination IP address and chooses the next hop. Your devices use it as their <b>default gateway</b>.</p></div></div>
+   <div><h4><button class="ah" type="button" aria-expanded="false" aria-controls="a3">Firewall<span class="pl"></span></button></h4><div class="ap" id="a3" hidden><p>Allows or blocks traffic by rule: which address, which port, which direction. The safe default is to block everything inbound and allow only what the business needs.</p></div></div>
+   <div><h4><button class="ah" type="button" aria-expanded="false" aria-controls="a4">DHCP server<span class="pl"></span></button></h4><div class="ap" id="a4" hidden><p>Hands out an IP address, subnet mask, gateway and DNS server to each device that joins, so nobody types them by hand. Printers and servers usually get fixed (static) addresses instead.</p></div></div>
+   <div><h4><button class="ah" type="button" aria-expanded="false" aria-controls="a5">DNS server<span class="pl"></span></button></h4><div class="ap" id="a5" hidden><p>Turns names such as <i>intranet.example.com</i> into IP addresses. Think of it as the phone book. If it fails, the internet seems down even though the connection is fine.</p></div></div>
+  </div></div>
+ <div class="blk"><h3>The office at a glance</h3>
+  <figure class="fig" data-topo><figcaption>Four user devices, a file server and a printer share one switch. The firewall and router sit between the office and the internet.</figcaption></figure></div>
+ <div class="blk"><h3>What happens when you open a web page</h3>
+  <ol class="proc">
+   <li><h4>Ask DNS for the address</h4><p>The laptop asks the DNS server to turn the site name into an IP address.</p></li>
+   <li><h4>Send to the gateway</h4><p>The destination is outside the office, so the laptop sends the data to its default gateway through the switch.</p></li>
+   <li><h4>Router forwards it</h4><p>The firewall checks the rules, then the router sends the traffic on towards the internet.</p></li>
+   <li><h4>Reply comes back</h4><p>The web server answers, and the reply follows the path in reverse until it reaches the laptop.</p></li>
+  </ol></div>
+</div></section>
+
+<section id="s2" class="sec lh"><div class="col"><span class="tag">Section 2</span><h2>Fix, secure and maintain</h2><div class="rule"></div><p class="big">A calm, repeatable method beats guessing. Then four habits keep faults from coming back.</p></div></section>
+<section class="sec"><div class="col">
+ <div class="blk"><h3>Four faults you will see every week</h3><p style="color:var(--muted)">Select a card to see the likely cause and first fix.</p>
+  <div class="flips" id="flips">
+   <button class="flip" type="button" aria-pressed="false"><span class="fi"><span class="ff"><h4>Address starts with 169.254</h4><span>A laptop is connected, but nothing loads.</span><em>Select to flip</em></span><span class="fb"><b>Likely cause</b><p>The device could not reach the DHCP server, so it gave itself an address.</p><b>First fix</b><p>Check the cable or Wi-Fi, then confirm the DHCP service is running.</p></span></span></button>
+   <button class="flip" type="button" aria-pressed="false"><span class="fi"><span class="ff"><h4>Ping works, websites do not</h4><span>You can reach an IP address but not a name.</span><em>Select to flip</em></span><span class="fb"><b>Likely cause</b><p>Name resolution is failing, so DNS is the suspect.</p><b>First fix</b><p>Test with nslookup, then check the DNS server address the device was given.</p></span></span></button>
+   <button class="flip" type="button" aria-pressed="false"><span class="fi"><span class="ff"><h4>Everyone is slow</h4><span>The whole office complains at once.</span><em>Select to flip</em></span><span class="fb"><b>Likely cause</b><p>A saturated internet link, a looping cable or one device flooding the network.</p><b>First fix</b><p>Look at traffic on the uplink and the switch port counters to find the heavy talker.</p></span></span></button>
+   <button class="flip" type="button" aria-pressed="false"><span class="fi"><span class="ff"><h4>One person is offline</h4><span>Everyone else is fine.</span><em>Select to flip</em></span><span class="fb"><b>Likely cause</b><p>Usually local: a loose cable, a dead switch port or a wrong network setting.</p><b>First fix</b><p>Swap the cable, try another port, then compare the device settings with a working one.</p></span></span></button>
+  </div></div>
+ <div class="blk"><h3>A method for finding the fault</h3>
+  <ol class="proc">
+   <li><h4>Define the problem</h4><p>Who is affected, since when, and what changed? One user or everyone?</p></li>
+   <li><h4>Start at the bottom</h4><p>Check the physical layer first: cable, link lights, power.</p></li>
+   <li><h4>Move up one step at a time</h4><p>Address and gateway, then name resolution, then the application.</p></li>
+   <li><h4>Fix and test</h4><p>Change one thing at a time and confirm it worked.</p></li>
+   <li><h4>Record it</h4><p>Write down the cause and fix so the next person finds it in seconds.</p></li>
+  </ol></div>
+ <div class="blk"><h3>Four habits that prevent outages</h3>
+  <div class="tabs"><div class="tl" role="tablist" aria-label="Maintenance habits">
+    <button role="tab" id="t0" aria-selected="true" aria-controls="p0">Access</button>
+    <button role="tab" id="t1" aria-selected="false" aria-controls="p1" tabindex="-1">Patching</button>
+    <button role="tab" id="t2" aria-selected="false" aria-controls="p2" tabindex="-1">Backups</button>
+    <button role="tab" id="t3" aria-selected="false" aria-controls="p3" tabindex="-1">Monitoring</button></div>
+   <div class="tp" role="tabpanel" id="p0" aria-labelledby="t0"><h4>Control who can do what</h4><p>Give each person only the access their job needs, and remove it the day they leave.</p><span class="chip">Least privilege</span><span class="chip">Unique accounts</span><span class="chip">Multi-factor sign-in</span></div>
+   <div class="tp" role="tabpanel" id="p1" aria-labelledby="t1" hidden><h4>Keep firmware and software current</h4><p>Most attacks use flaws that already have a fix. Schedule updates, test them on one device first, and keep a list of what runs where.</p><span class="chip">Monthly window</span><span class="chip">Test first</span><span class="chip">Asset list</span></div>
+   <div class="tp" role="tabpanel" id="p2" aria-labelledby="t2" hidden><h4>Back up, then prove you can restore</h4><p>A backup nobody has restored is only a hope. Keep a copy off site and test a restore every quarter. Back up device configurations too.</p><span class="chip">Off-site copy</span><span class="chip">Quarterly restore test</span><span class="chip">Saved configs</span></div>
+   <div class="tp" role="tabpanel" id="p3" aria-labelledby="t3" hidden><h4>See problems before users do</h4><p>Watch link usage, device temperature, disk space and failed sign-ins. Set alerts for the few numbers that matter, not for everything.</p><span class="chip">Uplink usage</span><span class="chip">Alerts</span><span class="chip">Log review</span></div>
+  </div></div>
+</div></section>
+
+<section id="kc" class="sec lh"><div class="col"><span class="tag">Knowledge check</span><h2>Check your understanding</h2><div class="rule"></div><p class="big">Three questions. You can change your mind before you move on, so pick the best answer.</p></div></section>
+<section class="sec"><div class="col"><div class="blk" id="quiz"></div><p class="score" id="score" aria-live="polite"></p></div></section>
+
+<section id="sum" class="sec lh"><div class="col"><span class="tag">Summary</span><h2>What to take with you</h2><div class="rule"></div></div></section>
+<section class="sec"><div class="col">
+ <div class="blk"><div class="take">
+  <div class="card"><h4>Know the path</h4><p>Device, switch, gateway, router, internet. Each part has one clear job.</p></div>
+  <div class="card"><h4>Work bottom-up</h4><p>Cable first, then address, then names, then the application. Change one thing at a time.</p></div>
+  <div class="card"><h4>Prevent, don't just fix</h4><p>Limit access, patch, back up and test the restore, and watch the numbers that matter.</p></div></div></div>
+ <div class="cont"><a class="btn" href="#intro">Back to the start</a></div>
+ <p class="note">Mockup of a lesson built in an authoring tool. All devices, names and addresses are fictional.</p>
+</div></section>
+</main></div>
+
+<script>
+(function(){
+document.querySelectorAll('[data-topo]').forEach(function(f){var t=document.getElementById('topo').content.cloneNode(true);f.insertBefore(t,f.firstChild)});
+/* accordion */
+document.querySelectorAll('#acc1 .ah').forEach(function(b){b.addEventListener('click',function(){var o=b.getAttribute('aria-expanded')==='true';document.querySelectorAll('#acc1 .ah').forEach(function(x){x.setAttribute('aria-expanded','false');document.getElementById(x.getAttribute('aria-controls')).hidden=true});if(!o){b.setAttribute('aria-expanded','true');document.getElementById(b.getAttribute('aria-controls')).hidden=false}})});
+/* flip cards */
+document.querySelectorAll('.flip').forEach(function(b){b.addEventListener('click',function(){b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')==='true'?'false':'true')})});
+/* tabs */
+var tabs=[].slice.call(document.querySelectorAll('[role="tab"]'));
+function pick(i){tabs.forEach(function(t,j){var on=i===j;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!on});tabs[i].focus()}
+tabs.forEach(function(t,i){t.addEventListener('click',function(){pick(i)});t.addEventListener('keydown',function(e){if(e.key==='ArrowRight')pick((i+1)%tabs.length);else if(e.key==='ArrowLeft')pick((i+tabs.length-1)%tabs.length)})});
+/* quiz */
+var Q=[
+{q:'Which device forwards traffic between the office network and the internet?',o:['Switch','Router','Printer','Access point'],a:1,r:'A router reads the destination IP address and sends traffic to the next network. A switch only connects devices inside the office.'},
+{q:'A laptop shows the address 169.254.12.7 and cannot reach anything. What is the most likely cause?',o:['DNS is slow','The firewall blocks websites','It could not reach the DHCP server','The printer is offline'],a:2,r:'A 169.254 address is self-assigned. The device asked for an address and got no answer from DHCP.'},
+{q:'You can ping an IP address but no website opens by name. Where do you look first?',o:['DNS','The network cable','The switch power','The backup job'],a:0,r:'The connection works, because the IP answers. Names are not being turned into addresses, so check DNS.'}];
+var qe=document.getElementById('quiz'),done=0,sc=0;
+Q.forEach(function(x,n){var d=document.createElement('div');d.className='q';var h=document.createElement('h4');h.textContent=(n+1)+'. '+x.q;d.appendChild(h);var fb=document.createElement('div');fb.setAttribute('aria-live','polite');
+x.o.forEach(function(t,i){var b=document.createElement('button');b.type='button';b.className='opt';b.textContent=t;b.onclick=function(){if(d.dataset.done)return;d.dataset.done=1;done++;var ok=i===x.a;if(ok)sc++;d.querySelectorAll('.opt').forEach(function(o,j){o.disabled=true;if(j===x.a)o.classList.add('right');else if(j===i)o.classList.add('wrong')});fb.className='fbk '+(ok?'ok':'no');fb.textContent=(ok?'Correct. ':'Not quite. ')+x.r;if(done===Q.length)document.getElementById('score').textContent='You scored '+sc+' out of '+Q.length+'.'};d.appendChild(b)});d.appendChild(fb);qe.appendChild(d)});
+/* outline + progress */
+var links=[].slice.call(document.querySelectorAll('#nav a')),ids=links.map(function(a){return a.getAttribute('href').slice(1)}),seen={};
+function upd(){var n=Object.keys(seen).length;document.getElementById('pb').style.width=Math.round(n/ids.length*100)+'%';document.getElementById('pt').textContent=Math.round(n/ids.length*100)+'% complete'}
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var id=e.target.id;seen[id]=1;links.forEach(function(a){var on=a.getAttribute('href')==='#'+id;if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');if(seen[a.getAttribute('href').slice(1)])a.parentNode.classList.add('seen')});upd()}})},{rootMargin:'-30% 0px -60% 0px'});ids.forEach(function(i){io.observe(document.getElementById(i))})}
+links.forEach(function(a){a.insertAdjacentHTML('afterbegin','<span class="dot"></span>')});
+})();
+</script>
+</body></html>

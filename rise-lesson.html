@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Routing Held Claims Lesson</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: fixed course outline on the left, continuous scrolling lesson on the right, as in an authoring-tool e-learning player.
+   Palette: ink, brand blue, gold highlight, soft blue-grey surfaces. Type: Space Grotesk headings, Inter body. */
+:root{--bg:#eef3f6;--surface:#ffffff;--ink:#14303f;--muted:#4f6877;--line:#d3e0e8;--blue:#0a6fa0;--blue-d:#08577e;--blue-soft:#dff0f8;--gold:#c8962e;--gold-soft:#f6ecd5;--ok:#1f7a4d;--ok-soft:#dff3e8;--bad:#a63a2a;--bad-soft:#f9e3df;--side:#0a6fa0;--side-ink:#ffffff;--mock:#ffffff;--mockbar:#0a6fa0;--mocknav:#1b2b3a;--call:#e07b1a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b23;--surface:#16272f;--ink:#e6f0f5;--muted:#9fb6c3;--line:#2a404c;--blue:#4cb3e6;--blue-d:#7cc8ee;--blue-soft:#17394a;--gold:#e0b04c;--gold-soft:#3a3118;--ok:#5cc58f;--ok-soft:#173a2a;--bad:#f08b7a;--bad-soft:#412019;--side:#0b4563;--mock:#1f333d;--mockbar:#0b4563;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1b23;--surface:#16272f;--ink:#e6f0f5;--muted:#9fb6c3;--line:#2a404c;--blue:#4cb3e6;--blue-d:#7cc8ee;--blue-soft:#17394a;--gold:#e0b04c;--gold-soft:#3a3118;--ok:#5cc58f;--ok-soft:#173a2a;--bad:#f08b7a;--bad-soft:#412019;--side:#0b4563;--mock:#1f333d;--mockbar:#0b4563;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 Inter,system-ui,sans-serif;padding-block:0}
+h1,h2,h3{font-family:'Space Grotesk',Inter,sans-serif;line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0 0 1em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.app{display:grid;grid-template-columns:320px minmax(0,1fr);min-height:100vh}
+/* sidebar */
+.side{position:sticky;top:0;height:100vh;overflow:auto;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column}
+.brand{background:var(--side);color:var(--side-ink);padding:28px 24px 22px}
+.brand small{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:10px}
+.brand h2{font-size:22px}
+.prog{margin-top:18px;font-size:13px;font-weight:600}
+.bar{height:6px;background:rgba(255,255,255,.28);border-radius:3px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#fff;transition:width .4s}
+.nav{padding:10px 8px 24px;margin:0;list-style:none}
+.nav small{display:block;padding:16px 16px 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.nav a{display:flex;gap:12px;align-items:flex-start;padding:10px 16px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.35}
+.nav a:hover{background:var(--blue-soft)}
+.nav a[aria-current="true"]{background:var(--blue-soft);font-weight:600}
+.dot{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center;font-size:11px;color:#fff}
+.done .dot{background:var(--ok);border-color:var(--ok)}
+.done .dot::after{content:"✓"}
+.menu{display:none}
+/* main */
+main{min-width:0}
+.sec{padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.col{max-width:860px;margin:0 auto;padding:56px 0 8px}
+.cover{background:linear-gradient(120deg,var(--surface) 0 58%,var(--blue-soft) 58%);border-bottom:1px solid var(--line)}
+.cover .col{max-width:1100px;padding:96px 0 88px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px;align-items:center}
+.cover h1{font-size:clamp(34px,5vw,56px)}
+.cover p.lede{color:var(--muted);font-size:19px;margin:18px 0 28px;max-width:34ch}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:999px;padding:13px 30px;font-weight:600;font-size:16px;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--blue-d)}
+.btn.ghost{background:transparent;color:var(--blue);border:2px solid var(--blue)}
+.tag{display:inline-block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--blue);margin-bottom:14px}
+.part{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:14px 0 0}
+.lessonhead{background:var(--surface);border-bottom:1px solid var(--line)}
+.lessonhead .col{padding:72px 0 48px}
+.lessonhead h2{font-size:clamp(30px,4vw,42px)}
+.lessonhead .rule{width:64px;height:4px;background:var(--blue);margin:26px 0}
+.lessonhead p.big{font-size:21px;color:var(--muted);max-width:46ch;margin:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center}
+.split h3{font-size:24px;margin-bottom:12px}
+h3.bh{font-size:26px;margin:0 0 14px}
+ul.obj{padding-left:20px;margin:0 0 1em}
+ul.obj li{margin:0 0 .5em}
+.quote{background:var(--gold-soft);border-radius:14px;padding:26px 28px;display:grid;grid-template-columns:72px minmax(0,1fr);gap:20px;align-items:center}
+.quote .av{width:72px;height:72px;border-radius:50%;background:var(--gold);display:grid;place-items:center}
+.quote p{margin:0;font-size:18px;font-weight:500}
+.quote small{display:block;color:var(--muted);margin-top:6px;font-size:14px}
+.banner{background:var(--blue);color:#fff;margin:48px 0 0;text-align:center}
+.banner .in{max-width:860px;margin:0 auto;padding:44px 0 36px}
+.banner p{font-size:21px;margin:0 0 20px;line-height:1.45}
+.banner button{background:#fff;color:var(--blue-d);border:0;border-radius:999px;padding:11px 26px;font-weight:700}
+/* challenge */
+.challenge{background:var(--blue-soft);border-radius:14px;padding:24px 26px;margin-bottom:20px}
+.challenge h3{font-size:22px;color:var(--blue-d);margin-bottom:6px}
+.challenge p{margin:0}
+.arena{background:#14303f;border-radius:16px;padding:24px}
+.arena .cap{color:#fff;font-weight:500;font-size:15px;margin-bottom:16px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tile{border:0;border-radius:12px;padding:0;text-align:left;background:var(--surface);color:var(--ink);overflow:hidden;display:flex;flex-direction:column;min-height:230px}
+.tile .top{padding:18px 14px;color:#fff;font-weight:700;text-align:center;font-size:17px}
+.t1 .top{background:#c8962e;color:#14303f}.t2 .top{background:#0a8fd0}.t3 .top{background:#2f9a62}
+.tile .top small{display:block;font-weight:400;font-size:12px;opacity:.9}
+.tile .body{padding:14px;font-size:14px;line-height:1.45;color:var(--muted);flex:1}
+.tile .body b{display:block;margin-top:10px;font-size:12px;padding:4px 8px;border-radius:6px;width:fit-content}
+.tile .no{background:var(--bad-soft);color:var(--bad)}.tile .yes{background:var(--ok-soft);color:var(--ok)}
+.tile[aria-pressed="false"] .body{opacity:.0}
+.complete{display:none;margin-top:16px;background:var(--ok-soft);border:2px solid var(--ok);border-radius:12px;padding:18px 20px;color:var(--ink)}
+.complete.on{display:block}
+.complete h4{margin:0 0 6px;font:700 19px 'Space Grotesk',sans-serif;color:var(--ok)}
+.complete p{margin:0 0 6px;font-size:15px}
+/* stepper */
+.stepper{padding:0;overflow:hidden}
+.stepper .hd{display:flex;justify-content:center;padding-top:18px}
+.chip{background:var(--blue);color:#fff;font-weight:700;font-size:13px;padding:5px 16px;border-radius:6px}
+.stepper h4{margin:12px 22px 4px;font:700 22px 'Space Grotesk',sans-serif}
+.stage{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center;padding:8px 14px}
+.arr{width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:var(--surface);font-size:20px}
+.arr:disabled{opacity:.25;cursor:default}
+.mockwrap{position:relative}
+.callout{position:absolute;background:var(--call);color:#fff;font-size:12.5px;line-height:1.35;padding:8px 10px;border-radius:8px;max-width:190px;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.stepper .cp{padding:6px 24px 22px;color:var(--muted);font-size:15px}
+.dots{display:flex;gap:8px;justify-content:center;padding-bottom:18px}
+.dots button{width:10px;height:10px;border-radius:50%;border:0;background:var(--line);padding:0}
+.dots button[aria-current="true"]{background:var(--blue);width:26px;border-radius:5px}
+/* flip */
+.flips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;perspective:900px}
+.flip{position:relative;height:210px;border:0;background:none;padding:0;transform-style:preserve-3d;transition:transform .5s}
+.flip[aria-pressed="true"]{transform:rotateY(180deg)}
+.flip>span{position:absolute;inset:0;border-radius:14px;padding:18px 14px;display:flex;align-items:center;justify-content:center;text-align:center;backface-visibility:hidden;font-weight:600;font-size:15px;line-height:1.35}
+.flip .f{color:#fff}
+.flip:nth-child(1) .f{background:#0b6a96}.flip:nth-child(2) .f{background:#1f8a72}.flip:nth-child(3) .f{background:#2d78c4}.flip:nth-child(4) .f{background:#b5821d}
+.flip .b{transform:rotateY(180deg);background:var(--surface);border:2px solid var(--line);font-weight:400;font-size:14px;color:var(--ink)}
+.hint{display:flex;align-items:center;gap:10px;margin:18px 0 0;padding:12px 16px;background:var(--blue-soft);border-radius:10px;font-size:15px;font-weight:600;color:var(--blue-d)}
+/* tabs */
+.tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:20px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:12px 18px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tabs button[aria-selected="true"]{color:var(--blue-d);border-color:var(--blue)}
+.cmp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.cmp>div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.cmp h4{margin:0 0 10px;font:700 17px 'Space Grotesk',sans-serif}
+.cmp ul{margin:0;padding-left:20px}.cmp li{margin-bottom:6px;font-size:15px}
+/* accordion */
+.acc button.q{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-weight:600;display:flex;justify-content:space-between;gap:12px;margin-top:10px}
+.acc .a{display:none;padding:14px 18px 6px;color:var(--muted);font-size:15px}
+.acc .a.on{display:block}
+/* walkthrough */
+.walk{padding:0;overflow:hidden}
+.walk .wh{padding:20px 24px;border-bottom:1px solid var(--line)}
+.walk .wh h4{margin:0;font:700 20px 'Space Grotesk',sans-serif}
+.walk .wh p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.screen{position:relative;background:var(--mock);min-height:360px}
+.sbar{background:var(--mockbar);color:#fff;font-size:13px;font-weight:600;padding:9px 14px;display:flex;justify-content:space-between}
+.sbody{display:grid;grid-template-columns:130px minmax(0,1fr);min-height:300px}
+.snav{background:var(--mocknav);color:#c9d6df;font-size:12px;padding:10px 0}
+.snav div{padding:7px 14px}.snav .on{background:rgba(255,255,255,.1);color:#fff}
+.smain{padding:14px;font-size:13px;overflow-x:auto}
+table.m{border-collapse:collapse;width:100%;min-width:480px}
+table.m th{text-align:left;background:var(--blue-soft);color:var(--blue-d);padding:8px;font-size:12px}
+table.m td{padding:8px;border-bottom:1px solid var(--line)}
+.hot{background:none;border:0;width:100%;text-align:left;padding:0;font:inherit;display:table-row}
+tr.hotrow{outline:3px solid var(--call);outline-offset:-3px;cursor:pointer;background:rgba(224,123,26,.12);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{background:rgba(224,123,26,.28)}}
+@media (prefers-reduced-motion:reduce){tr.hotrow,.flip,.bar i{animation:none;transition:none}html{scroll-behavior:auto}}
+.fld{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px 12px;align-items:center;margin-bottom:10px}
+.fld label{font-weight:600;font-size:12px;color:var(--muted)}
+.fld .v{padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.hotbox{outline:3px solid var(--call);cursor:pointer;background:rgba(224,123,26,.12)!important;animation:pulse 1.6s infinite}
+select{width:100%;padding:8px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px}
+.instr{background:var(--call);color:#fff;font-weight:600;text-align:center;padding:14px;font-size:15px}
+.notice{margin:12px 0 0;padding:12px 14px;border-radius:8px;background:var(--ok-soft);color:var(--ok);font-weight:600;font-size:14px}
+.row-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+/* quiz */
+.q{margin-bottom:22px}
+.q h4{margin:0 0 4px;font:700 18px 'Space Grotesk',sans-serif}
+.q .lab{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.opt{display:block;width:100%;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:13px 16px;margin-top:9px;font-size:15px}
+.opt:hover:not(:disabled){border-color:var(--blue)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.fb{margin-top:10px;font-size:15px;padding:12px 14px;border-radius:8px;background:var(--blue-soft);display:none}
+.fb.on{display:block}
+.score{font-weight:700;color:var(--blue-d);margin-top:8px}
+.res{border:1px dashed var(--line);border-radius:12px;padding:18px 22px;background:var(--surface)}
+.res h4{margin:0 0 8px;font:700 16px 'Space Grotesk',sans-serif}
+.res li{margin-bottom:4px;font-size:15px}
+.foot{padding:36px 0 56px;color:var(--muted);font-size:13px;text-align:center}
+.sp{height:28px}
+@media (max-width:900px){
+ .app{grid-template-columns:minmax(0,1fr)}
+ .menu{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--side);color:#fff;border:0;width:100%;padding:12px max(16px,env(safe-area-inset-left,0px));justify-content:space-between;font-weight:600}
+ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--side);z-index:30}
+ .side{position:fixed;inset:0 20% 0 0;z-index:40;height:100%;transform:translateX(-102%);transition:transform .25s;padding-top:env(safe-area-inset-top,0px)}
+ .side.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.4)}
+ .cover{background:var(--surface)}.cover .col{grid-template-columns:minmax(0,1fr);padding:56px 0}
+ .split,.cmp{grid-template-columns:minmax(0,1fr)}
+ .tiles{grid-template-columns:minmax(0,1fr)}
+ .flips{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sbody{grid-template-columns:minmax(0,1fr)}.snav{display:none}
+ .fld{grid-template-columns:minmax(0,1fr)}
+ .callout{position:static;max-width:none;margin:8px 14px 0}
+ .stage{grid-template-columns:36px minmax(0,1fr) 36px;padding:8px 8px}.arr{width:36px;height:36px}
+}
+</style>
+
+<button class="menu" id="menu" aria-expanded="false" aria-controls="side"><span>Course outline</span><span id="menup">0% complete</span></button>
+<div class="app">
+<aside class="side" id="side" aria-label="Course outline">
+ <div class="brand"><small>Sample Health Services</small><h2>Routing Held Claims for Additional Review</h2>
+  <div class="prog"><span id="pct">0% complete</span><div class="bar"><i id="barfill"></i></div></div></div>
+ <ul class="nav" id="nav"></ul>
+</aside>
+<main>
+
+<section class="sec cover" id="s0" data-title="Welcome"><div class="col">
+ <div><span class="tag">e-Learning · about 20 minutes</span>
+ <h1>Routing Held Claims for Additional Review</h1>
+ <p class="lede">Learn how to place a claim on hold, document it clearly and send it down the right review path.</p>
+ <a class="btn" href="#s1" data-go="s1">Start</a></div>
+ <svg viewBox="0 0 420 300" role="img" aria-label="Illustration of a claim file passing from a desk to a review team" width="420" style="max-width:100%;height:auto">
+  <rect x="20" y="30" width="380" height="240" rx="22" fill="var(--blue)"/>
+  <rect x="60" y="70" width="170" height="130" rx="10" fill="var(--surface)"/>
+  <rect x="76" y="90" width="110" height="10" rx="5" fill="var(--blue-soft)"/><rect x="76" y="112" width="138" height="8" rx="4" fill="var(--line)"/><rect x="76" y="130" width="120" height="8" rx="4" fill="var(--line)"/><rect x="76" y="148" width="138" height="8" rx="4" fill="var(--line)"/>
+  <rect x="76" y="170" width="64" height="18" rx="9" fill="var(--gold)"/>
+  <path d="M236 135h70" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M292 118l20 17-20 17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="352" cy="110" r="22" fill="#fff"/><circle cx="352" cy="160" r="22" fill="var(--gold)"/>
+ </svg>
+</div></section>
+
+<section class="sec" id="s0b" style="background:var(--surface)"><div class="col" style="padding-top:48px">
+ <h3 class="bh">Welcome</h3>
+ <p>Some claims cannot be finalised during first review. Guidance may call for an additional review before processing can continue, and the guidance article tells you which review team receives the claim: <b>Quality Review (QR)</b> or <b>Compliance Review (CR)</b>.</p>
+ <p>In this lesson you will learn how to prepare a claim for additional review by following the guidance in the applicable hold article. You will explore the information that must be documented before routing and the actions used to send the claim to the right team.</p>
+ <p>After completing this lesson, you will be able to:</p>
+ <ul class="obj">
+  <li>Decide whether a held claim goes to <b>QR</b> or <b>CR</b>, based on hold guidance.</li>
+  <li>Identify the <b>review packet</b> information to complete before routing.</li>
+  <li>Apply the correct routing action once the claim is ready.</li>
+ </ul>
+ <p>You will also complete a <b>guided walkthrough</b> in a practice version of ClaimDesk, a fictional claims tool used for training.</p>
+ <div class="sp"></div>
+</div></section>
+
+<!-- Lesson 1 -->
+<section class="sec lessonhead" id="s1" data-title="Introduction: The Route Is Determined by the Guidance"><div class="col">
+ <p class="part">Part 1 of 6</p><h2 style="margin-top:6px">Introduction: The Route Is Determined by the Guidance</h2><div class="rule"></div>
+ <p class="big">The review destination may change, but every successful handoff begins with clear guidance and a complete review packet.</p>
+</div></section>
+<section class="sec" id="s1b"><div class="col">
+ <div class="split"><svg viewBox="0 0 360 240" role="img" aria-label="Two colleagues reviewing a claim on a shared screen" style="width:100%;height:auto;border-radius:14px">
+   <rect width="360" height="240" fill="var(--blue-soft)"/><rect x="40" y="40" width="190" height="120" rx="8" fill="var(--surface)" stroke="var(--line)" stroke-width="2"/><rect x="56" y="58" width="100" height="8" rx="4" fill="var(--blue)"/><rect x="56" y="78" width="150" height="6" rx="3" fill="var(--line)"/><rect x="56" y="94" width="130" height="6" rx="3" fill="var(--line)"/><rect x="56" y="110" width="150" height="6" rx="3" fill="var(--line)"/><rect x="56" y="130" width="54" height="14" rx="7" fill="var(--gold)"/>
+   <circle cx="272" cy="96" r="26" fill="#2d6f8e"/><path d="M232 190c4-38 20-52 40-52s36 14 40 52z" fill="#2d6f8e"/><circle cx="306" cy="120" r="20" fill="#c8962e"/><path d="M280 200c3-30 14-40 26-40s24 10 26 40z" fill="#c8962e"/></svg>
+  <div><h3>The right route matters</h3><p>When a claim requires additional review, follow the guidance in the applicable hold article to decide where it goes and what the review packet needs.</p><p>Whichever team receives it, the goal is the same: a complete, review-ready record that helps reviewers understand the issue quickly.</p></div></div>
+ <div class="sp"></div>
+ <h3 class="bh">From guidance to routing decisions</h3>
+ <p>The decision to route a claim begins with the guidance in the applicable hold article. Before exploring the scenario below, think about what information would be used to decide the review path.</p>
+ <div class="challenge"><h3>Desk decision challenge</h3><p>Investigate the available information and decide what actually drives the routing decision.</p></div>
+ <div class="card" style="margin-bottom:20px"><b>Scenario.</b> A reviewer opens claim <b>CLM-000123</b>, a routine outpatient claim for a fictional member. Medical records are attached, two related claims appear in the history, and the hold article for this condition is available. The claim cannot move forward until additional review is complete.</div>
+ <div class="arena"><div class="cap">Review each source of information to understand its role in the review process and identify what drives routing decisions.</div>
+  <div class="tiles" id="tiles">
+   <button class="tile t1" aria-pressed="false" data-i="0"><span class="top">Medical records<small>Click to review</small></span><span class="body">Medical records support the review and may be required for evaluation.<b class="no">Does not determine routing</b></span></button>
+   <button class="tile t2" aria-pressed="false" data-i="1"><span class="top">Related claims<small>Click to review</small></span><span class="body">Related claims may require documentation and reference during review preparation.<b class="no">Does not determine routing</b></span></button>
+   <button class="tile t3" aria-pressed="false" data-i="2"><span class="top">Hold guidance article<small>Click to review</small></span><span class="body">The applicable hold article contains the routing guidance used to determine the review destination.<b class="yes">Provides routing guidance</b></span></button>
+  </div></div>
+ <div class="complete" id="tdone"><h4>Investigation complete</h4><p>The applicable hold guidance article determines whether a claim should be routed to <b>QR</b> or <b>CR</b>.</p><p><b>Best practice:</b> before routing a claim for additional review, always verify the guidance article. This ensures the claim reaches the right review team.</p></div>
+</div></section>
+<div class="banner"><div class="in"><p>Great start! The guidance article has identified the destination. Next, let’s explore how to prepare a complete, review-ready packet before routing a claim to Quality Review.</p><button data-go="s2">Continue</button></div></div>
+
+<!-- Lesson 2 -->
+<section class="sec lessonhead" id="s2" data-title="Give the Reviewer What They Need"><div class="col">
+ <p class="part">Part 2 of 6</p><h2 style="margin-top:6px">Give the Reviewer What They Need</h2><div class="rule"></div>
+ <p class="big">When the guidance directs a claim to Quality Review, the goal is to give reviewers the information they need to begin evaluating it immediately.</p>
+</div></section>
+<section class="sec" id="s2b"><div class="col">
+ <h3 class="bh">Preparing for QR review</h3>
+ <p>Routing is not simply moving the claim to another queue. The objective is to provide enough information for the reviewer to understand the request, locate supporting records and begin evaluation without extra questions.</p>
+ <div class="quote"><div class="av" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="14" r="9" fill="#14303f"/><path d="M4 38c2-14 9-18 16-18s14 4 16 18z" fill="#14303f"/></svg></div><div><p>“Does the review packet give the reviewer enough to understand the request?”</p><small>Quality reviewer, fictional persona</small></div></div>
+ <div class="sp"></div>
+ <p>Follow the process below to see how a review request is prepared and routed to <b>Quality Review</b>. Use the arrows to step through it.</p>
+ <div class="card stepper" id="stepper">
+  <div class="hd"><span class="chip" id="schip">Step 1</span></div><h4 id="stitle" style="text-align:center"></h4>
+  <div class="stage"><button class="arr" id="sprev" aria-label="Previous step">‹</button><div class="mockwrap" id="smock"></div><button class="arr" id="snext" aria-label="Next step">›</button></div>
+  <p class="cp" id="scap"></p><div class="dots" id="sdots"></div>
+ </div>
+ <div class="sp"></div><div class="sp"></div>
+ <h3 class="bh">Check what supports a review-ready record</h3>
+ <p>A review-ready record is built one step at a time. <b>Select each card</b> to reinforce the ideas.</p>
+ <div class="flips" id="flips">
+  <button class="flip" aria-pressed="false"><span class="f">What helps reviewers locate supporting documentation?</span><span class="b">Clear links to the records and a short note naming where each document sits.</span></button>
+  <button class="flip" aria-pressed="false"><span class="f">What helps reviewers understand what requires review?</span><span class="b">The specific line, amount or condition that triggered the hold, stated in plain words.</span></button>
+  <button class="flip" aria-pressed="false"><span class="f">What is the purpose of correspondence documentation?</span><span class="b">It shows what was already requested or received, so no one repeats the same outreach.</span></button>
+  <button class="flip" aria-pressed="false"><span class="f">What is the purpose of line guidance?</span><span class="b">It tells reviewers which service lines are affected and what direction applies to each.</span></button>
+ </div>
+ <div class="hint">Before routing a claim to QR: follow the guidance in the hold article, then complete the review packet and line guidance.</div>
+</div></section>
+<div class="banner"><div class="in"><p>Great work! Now that you’ve explored the QR route, let’s see how the process changes when the guidance directs a claim to Compliance Review.</p><button data-go="s3">Continue</button></div></div>
+
+<!-- Lesson 3 -->
+<section class="sec lessonhead" id="s3" data-title="Same Preparation, Different Review Path"><div class="col">
+ <p class="part">Part 3 of 6</p><h2 style="margin-top:6px">Same Preparation, Different Review Path</h2><div class="rule"></div>
+ <p class="big">Many of the actions used to route a claim for CR review are the same actions used when routing to QR.</p>
+</div></section>
+<section class="sec" id="s3b"><div class="col">
+ <p>When a hold article directs <b>Compliance Review</b>, follow most of the same preparation steps. The main difference is the review path and the routing action used to submit the request.</p>
+ <div class="tabs" role="tablist" id="tabs"><button role="tab" aria-selected="true" data-t="0">Same preparation</button><button role="tab" aria-selected="false" data-t="1">Different path</button><button role="tab" aria-selected="false" data-t="2">Side by side</button></div>
+ <div id="tabp"></div>
+ <div class="sp"></div>
+ <h3 class="bh">Preparation supports every review path</h3>
+ <p>A complete review packet supports an effective handoff whatever the destination. While the destination may differ, reviewers still depend on the same core information to understand the request, locate supporting evidence and continue the evaluation.</p>
+ <div class="acc" id="acc">
+  <button class="q" aria-expanded="false">Confirm the review request <span>+</span></button><div class="a">Open the claim and check that it was opened for the review type named in the hold article.</div>
+  <button class="q" aria-expanded="false">Document supporting records <span>+</span></button><div class="a">List each record the reviewer will need and where to find it in the claim.</div>
+  <button class="q" aria-expanded="false">Complete line guidance <span>+</span></button><div class="a">Record the review direction for each affected service line.</div>
+  <button class="q" aria-expanded="false">Place the hold and route <span>+</span></button><div class="a">Apply the hold, then use the routing action that matches the review path.</div>
+ </div>
+</div></section>
+<div class="banner"><div class="in"><p>Excellent! Next, follow a complete routing scenario to see how a processor uses hold guidance, supporting documentation and routing actions to prepare and submit a review-ready request.</p><button data-go="s4">Continue</button></div></div>
+
+<!-- Lesson 4 -->
+<section class="sec lessonhead" id="s4" data-title="Guided Walkthrough: Building a Review-Ready Record"><div class="col">
+ <p class="part">Part 4 of 6</p><h2 style="margin-top:6px">Guided Walkthrough: Building a Review-Ready Record</h2><div class="rule"></div>
+ <p class="big">See how a processor turns hold guidance into a complete, review-ready request.</p>
+</div></section>
+<section class="sec" id="s4b"><div class="col">
+ <p>In this guided walkthrough you follow a realistic routing scenario in a practice version of ClaimDesk. Select the highlighted areas to move through the activity. All names and records are fictional.</p>
+ <div class="card walk" id="walk" aria-live="polite"></div>
+ <div class="sp"></div>
+</div></section>
+<div class="banner"><div class="in"><p>Great work! Now apply what you’ve learned to identify the appropriate review path and routing action in a few claim scenarios.</p><button data-go="s5">Continue</button></div></div>
+
+<!-- Lesson 5 -->
+<section class="sec lessonhead" id="s5" data-title="Check Your Understanding"><div class="col">
+ <p class="part">Part 5 of 6</p><h2 style="margin-top:6px">Check Your Understanding</h2><div class="rule"></div>
+ <p class="big">Apply what you’ve learned to realistic review-routing scenarios.</p>
+</div></section>
+<section class="sec" id="s5b"><div class="col" id="quiz"></div></section>
+<div class="banner"><div class="in"><p>Great work! You’ve applied your understanding of the routing requirements for QR and CR review. Finally, let’s review the key concepts and takeaways from this lesson.</p><button data-go="s6">Continue</button></div></div>
+
+<!-- Lesson 6 -->
+<section class="sec lessonhead" id="s6" data-title="Summary: The Right Route Starts with the Right Preparation"><div class="col">
+ <p class="part">Part 6 of 6</p><h2 style="margin-top:6px">Summary: The Right Route Starts with the Right Preparation</h2><div class="rule"></div>
+</div></section>
+<section class="sec" id="s6b"><div class="col">
+ <p>You have just completed <b>Routing Held Claims for Additional Review</b>. You learned how hold guidance directs claims to specialised review paths when additional evaluation is required before processing can continue. Rather than choosing the destination independently, processors rely on the applicable hold article to decide whether a claim goes to <b>QR</b> or <b>CR</b>.</p>
+ <h3 class="bh" style="margin-top:28px">Key takeaways</h3>
+ <div class="card"><ul class="obj" style="list-style:none;padding:0;margin:0">
+  <li><b>Follow the hold guidance.</b> The applicable article determines whether review is required and names the path. Always read it before preparing a claim for routing.</li>
+  <li><b>Prepare the claim for review.</b> Place the hold, complete line guidance and document related claims where applicable.</li>
+  <li><b>Route with the right action.</b> Use the routing action that matches the review path, once the packet is complete.</li></ul></div>
+ <div class="sp"></div>
+ <div class="res"><h4>Resources</h4><p style="font-size:15px;margin:0 0 8px">Search the knowledge base for these fictional articles:</p>
+  <ul style="margin:0;padding-left:20px"><li>Routing held claims to Quality Review</li><li>Routing held claims to Compliance Review</li><li>Completing line guidance on a held claim</li><li>Hold guidance articles: reference list</li></ul></div>
+</div></section>
+<div class="banner" id="end"><div class="in"><p>Congratulations! You’ve successfully completed the lesson. Great job!</p><button data-go="s0">Back to the start</button></div></div>
+<div class="foot">Portfolio sample by Sandeep Bhat · Fictional organisation, system and records, rebuilt for demonstration</div>
+
+</main></div>
+
+<script>
+(function(){
+var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+/* outline */
+var secs=[["s0","Welcome"],["s1","Introduction: The Route Is Determined by the Guidance"],["s2","Give the Reviewer What They Need"],["s3","Same Preparation, Different Review Path"],["s4","Guided Walkthrough: Building a Review-Ready Record"],["s5","Check Your Understanding"],["s6","Summary: The Right Route Starts with the Right Preparation"]];
+var nav=$('#nav'),nh='<small>Course content</small>';
+secs.forEach(function(s,i){nh+='<li><a href="#'+s[0]+'" data-go="'+s[0]+'" data-nav="'+s[0]+'"><span class="dot"></span><span>'+(i?i+'. ':'')+s[1]+'</span></a></li>'});
+nav.innerHTML=nh;
+var seen={};
+function setProg(){var n=Object.keys(seen).length,p=Math.round(n/secs.length*100);$('#pct').textContent=p+'% complete';$('#menup').textContent=p+'% complete';$('#barfill').style.width=p+'%';
+ $$('[data-nav]').forEach(function(a){a.parentNode.classList.toggle('done',!!seen[a.dataset.nav])})}
+function go(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});$('#side').classList.remove('open');$('#menu').setAttribute('aria-expanded','false')}
+document.addEventListener('click',function(e){var a=e.target.closest('[data-go]');if(a){e.preventDefault();go(a.dataset.go)}});
+$('#menu').onclick=function(){var o=$('#side').classList.toggle('open');this.setAttribute('aria-expanded',o)};
+/* scroll spy: a lesson counts as complete once its closing banner has been reached */
+var order=['s0','s1','s2','s3','s4','s5','s6'];
+var bannerFor={s0:'s1',s1:'s2',s2:'s3',s3:'s4',s4:'s5',s5:'s6'};
+function spy(){var cur=null,y=innerHeight*0.35;
+ order.forEach(function(id){var r=document.getElementById(id).getBoundingClientRect();if(r.top<y)cur=id});
+ $$('[data-nav]').forEach(function(a){a.setAttribute('aria-current',a.dataset.nav===cur?'true':'false')});
+ var banners=$$('.banner');
+ banners.forEach(function(b,i){var r=b.getBoundingClientRect();if(r.top<innerHeight*0.9){seen[order[i]]=1}});
+ var cs=$('#s0b').getBoundingClientRect();if(cs.bottom<innerHeight*0.9)seen.s0=1;
+ var e=$('#end').getBoundingClientRect();if(e.top<innerHeight*0.9)seen.s6=1;
+ setProg()}
+addEventListener('scroll',spy,{passive:true});addEventListener('resize',spy);spy();
+/* challenge tiles */
+var tiles=$$('#tiles .tile'),tc={};
+tiles.forEach(function(t){t.onclick=function(){t.setAttribute('aria-pressed','true');tc[t.dataset.i]=1;if(Object.keys(tc).length===3)$('#tdone').classList.add('on')}});
+/* mock screens */
+function mock(kind,hl){
+ var rows='';for(var i=0;i<6;i++){rows+='<rect x="130" y="'+(78+i*22)+'" width="'+(220+((i*37)%90))+'" height="9" rx="4" fill="var(--line)"/><rect x="370" y="'+(78+i*22)+'" width="60" height="9" rx="4" fill="var(--blue-soft)"/><rect x="450" y="'+(78+i*22)+'" width="70" height="9" rx="4" fill="var(--line)"/>'}
+ var hi=hl!=null?'<rect x="124" y="'+(70+hl*22)+'" width="410" height="24" rx="4" fill="none" stroke="var(--call)" stroke-width="3"/>':'';
+ return '<svg viewBox="0 0 560 270" role="img" aria-label="Simplified ClaimDesk practice screen" style="width:100%;height:auto;background:var(--mock);border:1px solid var(--line);border-radius:8px"><rect width="560" height="30" fill="var(--mockbar)"/><rect x="12" y="10" width="90" height="10" rx="5" fill="#fff" opacity=".85"/><rect y="30" width="110" height="240" fill="var(--mocknav)"/>'+[0,1,2,3,4].map(function(i){return '<rect x="14" y="'+(48+i*26)+'" width="'+(60+(i*9)%30)+'" height="8" rx="4" fill="#fff" opacity="'+(i===kind%5?.9:.35)+'"/>'}).join('')+'<rect x="130" y="44" width="150" height="12" rx="6" fill="var(--ink)" opacity=".75"/>'+rows+hi+'<rect x="130" y="222" width="90" height="26" rx="13" fill="var(--blue)"/></svg>'}
+var steps=[
+ ["Confirm the review request","Open the claim and verify that it was opened for the review type named in the hold article.","Select the claim opened for review.",{l:60,t:92}],
+ ["Locate the supporting documentation","Review the documentation attached to the claim and check that the records needed to support the review are available.","Supporting records are listed on the claim record.",{l:70,t:120}],
+ ["Document correspondence","Document any correspondence tied to the review request. Identify the primary item and remove duplicates.","Add one note per outreach.",{l:60,t:150}],
+ ["Review supporting documentation","Read the documentation to understand the issue requiring review and confirm it supports the request.","Highlight the line that triggered the hold.",{l:50,t:110}],
+ ["Complete line guidance","Record the review direction for each service line affected by the hold.","Choose the direction for each line.",{l:70,t:100}],
+ ["Place the claim on hold","After the packet is prepared, place the claim in the correct hold status.","Select the hold status named in the article.",{l:55,t:170}],
+ ["Route the claim to Quality Review","The packet is complete and every required item is documented, so the claim is ready to route.","Use the routing action for Quality Review.",{l:60,t:140}]];
+var si=0;
+function renderStep(){var s=steps[si];$('#schip').textContent='Step '+(si+1);$('#stitle').textContent=s[0];$('#scap').textContent=s[1];
+ $('#smock').innerHTML=mock(si,si%6)+'<div class="callout" style="left:'+s[3].l+'%;top:'+(s[3].t+10)+'px">'+s[2]+'</div>';
+ $('#sprev').disabled=si===0;$('#snext').disabled=si===steps.length-1;
+ $$('#sdots button').forEach(function(b,i){b.setAttribute('aria-current',i===si?'true':'false')})}
+var dh='';steps.forEach(function(s,i){dh+='<button aria-label="Go to step '+(i+1)+'" data-i="'+i+'"></button>'});$('#sdots').innerHTML=dh;
+$$('#sdots button').forEach(function(b){b.onclick=function(){si=+b.dataset.i;renderStep()}});
+$('#sprev').onclick=function(){if(si>0){si--;renderStep()}};$('#snext').onclick=function(){if(si<steps.length-1){si++;renderStep()}};renderStep();
+/* flip cards */
+$$('#flips .flip').forEach(function(f){f.onclick=function(){f.setAttribute('aria-pressed',f.getAttribute('aria-pressed')==='true'?'false':'true')}});
+/* tabs */
+var tp=[
+ '<div class="card"><h4 style="margin:0 0 8px;font:700 19px Space Grotesk,sans-serif">The preparation actions stay the same</h4><ul class="obj" style="margin:0"><li>Confirm the review request</li><li>Locate and review supporting documentation</li><li>Document correspondence</li><li>Complete line guidance</li><li>Place the claim on hold</li></ul></div>',
+ '<div class="card"><h4 style="margin:0 0 8px;font:700 19px Space Grotesk,sans-serif">Only the destination and routing action change</h4><p>When the hold article names <b>Compliance Review</b>, the processor uses the CR routing action and writes the review reason in the compliance wording given in the article.</p><p style="margin:0">The primary difference is the review path and the routing action used to submit the request.</p></div>',
+ '<div class="cmp"><div><h4>Quality Review (QR)</h4><ul><li>Reviewer checks accuracy of processing</li><li>Routing action: Ready for QR</li><li>Packet: standard sections</li></ul></div><div><h4>Compliance Review (CR)</h4><ul><li>Reviewer checks policy and rule fit</li><li>Routing action: Ready for CR</li><li>Packet: standard sections plus compliance wording</li></ul></div></div>'];
+function tab(i){$$('#tabs button').forEach(function(b,k){b.setAttribute('aria-selected',k===i?'true':'false')});$('#tabp').innerHTML=tp[i]}
+$$('#tabs button').forEach(function(b){b.onclick=function(){tab(+b.dataset.t)}});tab(0);
+/* accordion */
+$$('#acc .q').forEach(function(b){b.onclick=function(){var a=b.nextElementSibling,o=a.classList.toggle('on');b.setAttribute('aria-expanded',o);b.lastElementChild.textContent=o?'–':'+'}});
+/* walkthrough */
+var W=$('#walk'),ws=0,hold='',owner='';
+function head(t,s){return '<div class="wh"><h4>'+t+'</h4><p>'+s+'</p></div>'}
+function frame(inner,instr){return '<div class="screen"><div class="sbar"><span>ClaimDesk (practice)</span><span>Reviewer: A. Example</span></div><div class="sbody"><div class="snav"><div>Dashboard</div><div class="on">Work</div><div>Claims</div><div>Notes</div><div>Reports</div></div><div class="smain">'+inner+'</div></div></div>'+(instr?'<div class="instr">'+instr+'</div>':'')}
+function drawW(){
+ if(ws===0){W.innerHTML=head('Step 1 of 3 · Open the work item','Select the work item that needs review.')+frame('<table class="m"><tr><th>Item</th><th>Type</th><th>Age</th><th>Status</th></tr><tr><td>CLM-000118</td><td>Outpatient</td><td>2 days</td><td>Open</td></tr><tr class="hotrow" id="hr" tabindex="0" role="button" aria-label="Open claim CLM-000123"><td>CLM-000123</td><td>Outpatient</td><td>4 days</td><td>Review requested</td></tr><tr><td>CLM-000131</td><td>Inpatient</td><td>1 day</td><td>Open</td></tr></table>','Click the highlighted work item.');
+  var h=$('#hr');h.onclick=function(){ws=1;drawW()};h.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();ws=1;drawW()}}}
+ else if(ws===1){W.innerHTML=head('Step 2 of 3 · Read the hold guidance','Find the article field that names the review path.')+frame('<div class="fld"><label>Claim</label><div class="v">CLM-000123 · Outpatient</div><label>Hold article</label><button class="v hotbox" id="ha" style="text-align:left">HA-204 · Missing documentation, review required</button><label>Review path</label><div class="v" style="opacity:.6">Select the article to reveal</div><label>Line guidance</label><div class="v" style="opacity:.6">Not completed</div></div><div class="callout" style="position:static;margin-top:10px">The hold article identifies the review path required.</div>','Click the highlighted hold article.');
+  $('#ha').onclick=function(){ws=2;drawW()}}
+ else if(ws===2){W.innerHTML=head('Step 3 of 3 · Hold the claim and route it','Complete the packet, then use the routing action the article names.')+frame('<div class="fld"><label>Review path</label><div class="v" style="background:var(--ok-soft)"><b>Quality Review (QR)</b>, per HA-204</div><label for="hs">Hold status</label><select id="hs"><option value="">Choose a status…</option><option>Hold: waiting for documents</option><option>Hold: ready for QR</option><option>Release for payment</option></select><label for="ow">Next action owner</label><select id="ow"><option value="">Choose an owner…</option><option>Quality Review team</option><option>Provider outreach</option><option>No owner needed</option></select></div><div class="row-actions"><button class="btn" id="rt" disabled>Route to Quality Review</button></div><div id="wmsg"></div>','Choose the hold status and owner, then route the claim.');
+  var hs=$('#hs'),ow=$('#ow'),rt=$('#rt');
+  function chk(){rt.disabled=!(hs.value==='Hold: ready for QR'&&ow.value==='Quality Review team');var m=$('#wmsg');if(hs.value&&hs.value!=='Hold: ready for QR')m.innerHTML='<div class="notice" style="background:var(--bad-soft);color:var(--bad)">The article names a QR review, so the claim should be on “Hold: ready for QR”.</div>';else if(ow.value&&ow.value!=='Quality Review team')m.innerHTML='<div class="notice" style="background:var(--bad-soft);color:var(--bad)">The reviewer who acts next is the Quality Review team.</div>';else m.innerHTML=''}
+  hs.onchange=chk;ow.onchange=chk;
+  rt.onclick=function(){ws=3;drawW()}}
+ else{W.innerHTML=head('Walkthrough complete','The claim now has a clear reason, action and owner.')+'<div class="screen" style="padding:22px"><div class="notice" style="margin:0 0 12px">CLM-000123 was routed to Quality Review with a complete review packet.</div><ul class="obj"><li>Guidance article read first</li><li>Hold status and owner recorded</li><li>Claim visible to the review team</li></ul><div class="row-actions"><button class="btn ghost" id="wr">Try it again</button></div></div>';$('#wr').onclick=function(){ws=0;drawW()}}}
+drawW();
+/* quiz */
+var Q=[
+ {t:"A claim needs additional review. What decides whether it goes to QR or CR?",o:["The processor’s judgement","The applicable hold guidance article","The size of the claim","Whichever queue is shorter"],c:1,f:"The hold article names the review path. Read it before preparing the claim."},
+ {t:"What is the main purpose of reviewing supporting documentation before routing?",o:["To find the claim number","To confirm the records support the review request and can be located","To avoid adding a note","To change the member’s details"],c:1,f:"The reviewer should be able to locate evidence and begin evaluation without extra questions."},
+ {t:"A claim is routed to CR. Which statement is correct?",o:["The preparation steps are completely different","Most preparation is the same; the path and routing action differ","No packet is needed","Line guidance is skipped"],c:1,f:"Preparation supports every path. Only the destination and routing action change."}];
+var qh='',qs=0,qa=0;
+Q.forEach(function(q,i){qh+='<div class="q card" id="q'+i+'"><div class="lab">Question '+(i+1)+' of '+Q.length+'</div><h4>'+q.t+'</h4>'+q.o.map(function(o,k){return '<button class="opt" data-q="'+i+'" data-k="'+k+'">'+o+'</button>'}).join('')+'<div class="fb" id="fb'+i+'"></div></div>'});
+qh+='<div class="score" id="sc" aria-live="polite"></div>';$('#quiz').innerHTML=qh;
+$$('.opt').forEach(function(b){b.onclick=function(){var i=+b.dataset.q,k=+b.dataset.k,q=Q[i];$$('.opt[data-q="'+i+'"]').forEach(function(x){x.disabled=true;if(+x.dataset.k===q.c)x.classList.add('ok')});
+ var ok=k===q.c;if(!ok)b.classList.add('bad');else qs++;qa++;var f=$('#fb'+i);f.textContent=(ok?'Correct. ':'Not quite. ')+q.f;f.classList.add('on');
+ $('#sc').textContent=qa===Q.length?'You answered '+qs+' of '+Q.length+' correctly.':''}});
+})();
+</script>
+
+</html>
