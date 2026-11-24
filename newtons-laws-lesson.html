@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forces in Motion: Newton's Laws — Interactive Physics Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0B1B2B;--mute:#4A5868;--line:#E2E8F0;--bg:#FFFFFF;--soft:#F1F7F9;--teal:#0E7490;--teal-d:#0B5C72;--teal-l:#E0F2F7;--orange:#EA580C;--orange-t:#C2410C;--orange-l:#FFF1E8;--good:#15803D;--good-l:#E8F6EC;--bad:#B91C1C;--bad-l:#FDECEC}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.7 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:Sora,Inter,sans-serif;line-height:1.2;margin:0}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.bar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+.bar-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:12px 20px}
+.crumb{font:600 13px/1.3 Inter,sans-serif;color:var(--mute);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pct{font:600 13px/1 Inter,sans-serif;color:var(--teal)}
+.prog{height:4px;background:var(--line)}
+.prog i{display:block;height:4px;width:0;background:var(--teal);transition:width .3s}
+.hero{background:linear-gradient(160deg,#0B3A4C 0%,#0E7490 100%);color:#fff;padding:72px 20px 88px;position:relative;overflow:hidden}
+.hero-in{max-width:760px;margin:0 auto;position:relative;z-index:1}
+.kicker{font:600 13px/1.2 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#FFD3B5;margin:0 0 16px}
+.hero h1{font-size:clamp(34px,6vw,52px);margin-bottom:18px}
+.hero p{margin:0 0 28px;color:#D7EEF4;font-size:19px;max-width:600px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.meta span{background:rgba(255,255,255,.14);border-radius:999px;padding:6px 14px;font:500 14px/1.3 Inter,sans-serif}
+.hero svg.orbit{position:absolute;right:-60px;top:-40px;width:420px;opacity:.18}
+.btn{text-decoration:none;display:inline-flex;align-items:center;gap:10px;border:0;border-radius:8px;padding:14px 24px;font:600 16px/1 Inter,sans-serif;background:var(--orange);color:#fff;min-height:48px}
+.btn:hover{background:#C2410C}
+.btn.ghost{background:#fff;color:var(--teal);border:2px solid var(--teal)}
+.btn.ghost:hover{background:var(--teal-l)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.col{max-width:760px;margin:0 auto;padding:0 20px}
+.block{padding:56px 0;border-bottom:1px solid var(--line)}
+.block:last-child{border-bottom:0}
+.label{font:600 12px/1.2 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--orange-t);margin:0 0 10px}
+.block h2{font-size:clamp(26px,4vw,32px);margin-bottom:16px}
+.block h3{font-size:20px;margin-bottom:8px}
+.block p{margin:0 0 16px;color:#243444}
+.note{background:var(--soft);border-left:0;border-radius:12px;padding:18px 20px;margin:20px 0}
+.objectives{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:12px}
+.objectives li{display:flex;gap:14px;align-items:flex-start;background:var(--soft);border-radius:12px;padding:14px 16px}
+.objectives b{flex:none;width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font:700 14px/1 Inter,sans-serif}
+.reveal{margin-top:12px}
+.reveal-body{margin-top:14px;padding:16px 18px;border-radius:12px;background:var(--orange-l)}
+/* gate */
+.gate{display:flex;justify-content:center;padding:36px 0}
+.locked{display:none}
+/* flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
+.flip{perspective:1000px;background:none;border:0;padding:0;height:280px;text-align:left}
+.flip-in{display:block;position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip[aria-pressed="true"] .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.front{background:var(--teal);color:#fff;justify-content:space-between}
+.front .n{font:700 44px/1 Sora,sans-serif;opacity:.5}
+.front h3{color:#fff;font-size:19px}
+.front small{font:500 13px/1.3 Inter,sans-serif;color:#CBE9F1}
+.back{background:#fff;border:2px solid var(--teal);transform:rotateY(180deg);font-size:15px;line-height:1.55;color:#243444;overflow:auto}
+.back b{color:var(--teal-d)}
+/* mcq */
+.q{border:1px solid var(--line);border-radius:14px;padding:22px;margin-top:20px}
+.q legend{font:600 17px/1.5 Inter,sans-serif;padding:0;margin-bottom:14px;color:var(--ink)}
+.q fieldset{border:0;margin:0;padding:0}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;margin-bottom:8px;cursor:pointer;background:#fff}
+.opt:hover{border-color:var(--teal)}
+.opt input{margin-top:5px;accent-color:var(--teal);width:18px;height:18px;flex:none}
+.opt.right{border-color:var(--good);background:var(--good-l)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-l)}
+.fb{display:none;margin-top:12px;padding:14px 16px;border-radius:10px;font-size:15px;line-height:1.6}
+.fb.show{display:block}
+.fb.good{background:var(--good-l);color:#14532D}
+.fb.bad{background:var(--bad-l);color:#7F1D1D}
+.fb.info{background:var(--teal-l);color:#0B3A4C}
+/* sim */
+.sim{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:20px}
+.track{position:relative;height:170px;background:linear-gradient(#F4FAFC 0 72%,#D9E7EC 72% 100%);overflow:hidden}
+.ticks{position:absolute;left:0;right:0;bottom:26%;height:10px;background:repeating-linear-gradient(90deg,#9FB4BF 0 1px,transparent 1px 10%)}
+.cart{position:absolute;left:12px;bottom:26%;width:96px;transform:translateX(0);will-change:transform}
+.arrow{position:absolute;left:-6px;top:-18px;height:6px;background:var(--orange);border-radius:3px;transform-origin:right center;transform:translateX(-100%)}
+.arrow::after{content:"";position:absolute;right:-10px;top:-6px;border-left:12px solid var(--orange);border-top:9px solid transparent;border-bottom:9px solid transparent}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding:20px}
+.ctl label{display:flex;justify-content:space-between;font:600 15px/1.3 Inter,sans-serif;margin-bottom:8px}
+.ctl output{color:var(--teal)}
+.ctl input[type=range]{width:100%;accent-color:var(--teal);height:32px}
+.read{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 20px 20px}
+.read div{background:var(--soft);border-radius:10px;padding:12px;text-align:center}
+.read b{display:block;font:700 24px/1.1 Sora,sans-serif;color:var(--teal-d)}
+.read span{font:500 13px/1.3 Inter,sans-serif;color:var(--mute)}
+.simbtns{display:flex;flex-wrap:wrap;gap:10px;padding:0 20px 20px}
+.formula{font:700 22px/1 Sora,sans-serif;text-align:center;padding:16px;background:var(--orange-l);border-radius:12px;color:var(--orange-t);margin:16px 0}
+/* hotspots */
+.hs{position:relative;border-radius:16px;background:var(--soft);margin-top:20px}
+.hs svg{display:block;width:100%;height:auto}
+.dot{position:absolute;width:44px;height:44px;border-radius:50%;border:0;background:var(--orange);color:#fff;font:700 18px/1 Inter,sans-serif;transform:translate(-50%,-50%);box-shadow:0 0 0 6px rgba(234,88,12,.25)}
+.dot[aria-expanded="true"]{background:var(--teal);box-shadow:0 0 0 6px rgba(14,116,144,.25)}
+.dot.seen:not([aria-expanded="true"]){background:#64748B;box-shadow:none}
+.hs-panel{margin-top:16px;padding:18px 20px;border-radius:12px;border:2px solid var(--teal);min-height:96px}
+.count{font:600 14px/1 Inter,sans-serif;color:var(--teal);margin-top:12px}
+/* sort */
+.pool{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;min-height:56px;padding:12px;border:2px dashed var(--line);border-radius:12px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font:500 15px/1.4 Inter,sans-serif;text-align:left;min-height:44px;color:var(--ink)}
+.chip[aria-pressed="true"]{border-color:var(--orange);box-shadow:0 0 0 3px rgba(234,88,12,.25)}
+.chip.ok{border-color:var(--good);background:var(--good-l)}
+.chip.no{border-color:var(--bad);background:var(--bad-l)}
+.bins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.bin{border:2px solid var(--teal);border-radius:14px;padding:12px;min-height:190px;display:flex;flex-direction:column;gap:8px;background:#fff;text-align:left}
+.bin.over{background:var(--teal-l)}
+.bin-h{font:700 15px/1.3 Sora,sans-serif;color:var(--teal-d);background:none;border:0;padding:6px 4px;text-align:left;min-height:44px}
+.bin .chip{font-size:14px}
+.done{text-align:center;padding:40px 24px;border-radius:16px;background:linear-gradient(160deg,#0B3A4C,#0E7490);color:#fff}
+.done h2{color:#fff}
+.done p{color:#D7EEF4}
+details{border:1px solid var(--line);border-radius:12px;padding:4px 18px;margin-top:10px}
+summary{font:600 16px/1.4 Inter,sans-serif;padding:12px 0;cursor:pointer}
+details p{margin:0 0 14px}
+footer{max-width:760px;margin:0 auto;padding:32px 20px 56px;font-size:13px;color:var(--mute)}
+@media (max-width:720px){.hero svg.orbit{opacity:.08}.flips,.bins{grid-template-columns:1fr}.flip{height:220px}.controls{grid-template-columns:1fr}.read{grid-template-columns:1fr 1fr 1fr}.read b{font-size:19px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in"><span class="crumb">Physics · Unit 2: Forces and Motion · Lesson 3</span><span class="pct" id="pct">0% complete</span></div><div class="prog"><i id="progbar"></i></div></div>
+
+<header class="hero">
+<svg class="orbit" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="90" fill="none" stroke="#fff" stroke-width="2"/><circle cx="100" cy="100" r="60" fill="none" stroke="#fff" stroke-width="2"/><circle cx="100" cy="100" r="14" fill="#fff"/><circle cx="190" cy="100" r="8" fill="#fff"/><circle cx="58" cy="58" r="6" fill="#fff"/></svg>
+<div class="hero-in">
+<p class="kicker">Interactive lesson · Physics</p>
+<h1>Forces in Motion: Newton's Three Laws</h1>
+<p>Why is a full shopping cart harder to push than an empty one? In this lesson you will predict, test and explain how forces change motion.</p>
+<div class="meta"><span>Grades 9–12</span><span>About 25 minutes</span><span>6 activities</span></div>
+<a class="btn" href="#s-hook">Start lesson <span aria-hidden="true">→</span></a>
+</div>
+</header>
+
+<main>
+<!-- 1 hook -->
+<section class="block" id="s-hook" data-step>
+<div class="col">
+<p class="label">Warm-up</p>
+<h2>The shopping cart problem</h2>
+<svg viewBox="0 0 720 220" role="img" aria-label="Two shopping carts: one empty, one full of groceries, each pushed by a hand with the same force arrow" style="width:100%;height:auto;margin:8px 0 20px;background:var(--soft);border-radius:14px">
+<g transform="translate(70,40)"><path d="M0 20h30l25 90h120l20-70H45" fill="none" stroke="#0B5C72" stroke-width="6" stroke-linejoin="round"/><circle cx="70" cy="135" r="12" fill="#0B1B2B"/><circle cx="160" cy="135" r="12" fill="#0B1B2B"/><path d="M-60 60h50" stroke="#EA580C" stroke-width="8" stroke-linecap="round"/><path d="M-14 48l16 12-16 12z" fill="#EA580C"/><text x="40" y="180" font-family="Inter" font-size="16" font-weight="600" fill="#243444">Empty cart</text></g>
+<g transform="translate(430,40)"><rect x="60" y="0" width="40" height="45" rx="4" fill="#F59E0B"/><rect x="104" y="10" width="34" height="35" rx="4" fill="#16A34A"/><rect x="142" y="4" width="30" height="41" rx="4" fill="#DC2626"/><rect x="80" y="-18" width="44" height="22" rx="4" fill="#7C3AED"/><path d="M0 20h30l25 90h120l20-70H45" fill="none" stroke="#0B5C72" stroke-width="6" stroke-linejoin="round"/><circle cx="70" cy="135" r="12" fill="#0B1B2B"/><circle cx="160" cy="135" r="12" fill="#0B1B2B"/><path d="M-60 60h50" stroke="#EA580C" stroke-width="8" stroke-linecap="round"/><path d="M-14 48l16 12-16 12z" fill="#EA580C"/><text x="46" y="180" font-family="Inter" font-size="16" font-weight="600" fill="#243444">Full cart</text></g>
+</svg>
+<p>You push both carts with exactly the same force. The empty cart speeds up quickly. The full cart barely gets going.</p>
+<div class="note"><b>Think about it:</b> what is different about the two carts, and why would that change how fast they speed up?</div>
+<button class="btn ghost reveal" type="button" aria-expanded="false" aria-controls="hook-ans" id="hook-btn">Reveal the idea</button>
+<div class="reveal-body" id="hook-ans" hidden><b>Mass.</b> The full cart has more mass, so the same push gives it a smaller acceleration. By the end of this lesson you will be able to calculate exactly how much smaller.</div>
+<h3 style="margin-top:36px">By the end of this lesson you will be able to:</h3>
+<ul class="objectives">
+<li><b>1</b><span>State Newton's three laws of motion in your own words.</span></li>
+<li><b>2</b><span>Use F = m × a to predict how force and mass change acceleration.</span></li>
+<li><b>3</b><span>Identify the forces acting on an object in a free-body diagram.</span></li>
+</ul>
+<div class="gate"><button class="btn" type="button" data-unlock="s-laws">Continue</button></div>
+</div>
+</section>
+
+<!-- 2 flip cards -->
+<section class="block locked" id="s-laws" data-step>
+<div class="col">
+<p class="label">Explore</p>
+<h2>Meet the three laws</h2>
+<p>Select each card to flip it and read the law with an everyday example.</p>
+<div class="flips">
+<button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="face front"><span class="n">1</span><span><h3>Law of inertia</h3><small>Select to flip</small></span></span><span class="face back"><span><b>An object keeps doing what it is doing</b> (staying still or moving at a steady speed in a straight line) unless a net force acts on it.</span><span><b>Example:</b> when a bus brakes suddenly, your body keeps moving forward.</span></span></span></button>
+<button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="face front"><span class="n">2</span><span><h3>Force = mass × acceleration</h3><small>Select to flip</small></span></span><span class="face back"><span><b>Acceleration depends on the net force and the mass.</b> More force means more acceleration; more mass means less.</span><span><b>Example:</b> the same push moves an empty cart faster than a full one.</span></span></span></button>
+<button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="face front"><span class="n">3</span><span><h3>Action and reaction</h3><small>Select to flip</small></span></span><span class="face back"><span><b>Forces come in equal and opposite pairs.</b> If A pushes on B, B pushes back on A just as hard.</span><span><b>Example:</b> a swimmer pushes water backward, and the water pushes the swimmer forward.</span></span></span></button>
+</div>
+<p class="count" id="flipcount" aria-live="polite">0 of 3 cards flipped</p>
+<div class="gate"><button class="btn" type="button" data-unlock="s-sim" id="flipgate" disabled>Flip all three cards to continue</button></div>
+</div>
+</section>
+
+<!-- 3 predict + sim -->
+<section class="block locked" id="s-sim" data-step>
+<div class="col">
+<p class="label">Predict, then test</p>
+<h2>Newton's second law lab</h2>
+<p>Scientists predict before they test. Make your prediction, then use the lab to check it.</p>
+<div class="q"><fieldset id="predict"><legend>A cart accelerates at 2 m/s². If you double the force and keep the mass the same, what will its acceleration be?</legend>
+<label class="opt"><input type="radio" name="pr" value="a"> 1 m/s² (it halves)</label>
+<label class="opt"><input type="radio" name="pr" value="b"> 2 m/s² (no change)</label>
+<label class="opt"><input type="radio" name="pr" value="c"> 4 m/s² (it doubles)</label>
+<label class="opt"><input type="radio" name="pr" value="d"> 8 m/s² (it quadruples)</label>
+</fieldset>
+<button class="btn" type="button" id="lock-pred" style="margin-top:8px">Lock in my prediction</button>
+<div class="fb info" id="pred-fb" aria-live="polite"></div>
+</div>
+
+<div class="sim" id="sim" hidden>
+<div class="track" aria-hidden="true"><div class="ticks"></div>
+<div class="cart" id="cart"><div class="arrow" id="farrow" style="width:60px"></div>
+<svg viewBox="0 0 96 60" width="96" height="60"><rect x="4" y="8" width="88" height="34" rx="6" fill="#0E7490"/><rect x="12" y="2" width="30" height="14" rx="3" fill="#F59E0B" id="load1"/><rect x="46" y="0" width="30" height="16" rx="3" fill="#16A34A" id="load2"/><circle cx="24" cy="48" r="10" fill="#0B1B2B"/><circle cx="72" cy="48" r="10" fill="#0B1B2B"/></svg>
+</div></div>
+<div class="controls">
+<div class="ctl"><label for="force">Applied force <output id="fo" for="force">20 N</output></label><input id="force" type="range" min="0" max="100" step="5" value="20"></div>
+<div class="ctl"><label for="mass">Mass of cart <output id="mo" for="mass">10 kg</output></label><input id="mass" type="range" min="5" max="50" step="5" value="10"></div>
+</div>
+<div class="read" aria-live="polite">
+<div><b id="ra">2.0</b><span>acceleration (m/s²)</span></div>
+<div><b id="rv">0.0</b><span>speed after run (m/s)</span></div>
+<div><b id="rd">0.0</b><span>distance after run (m)</span></div>
+</div>
+<div class="simbtns"><button class="btn" type="button" id="run">Run 3-second test</button><button class="btn ghost" type="button" id="reset">Reset cart</button></div>
+</div>
+<div class="formula" id="formula" hidden>a = F ÷ m</div>
+<div class="note" id="sim-task" hidden><b>Your task:</b> set the force to 20 N and run the test. Then set it to 40 N and run it again. Did the acceleration double, like your prediction said?</div>
+<div class="gate"><button class="btn" type="button" data-unlock="s-fbd" id="simgate" disabled>Run the test at least twice to continue</button></div>
+</div>
+</section>
+
+<!-- 4 hotspots -->
+<section class="block locked" id="s-fbd" data-step>
+<div class="col">
+<p class="label">Free-body diagram</p>
+<h2>Every force on the box</h2>
+<p>A student pushes a box of books across the floor. Select each numbered marker to learn about one force acting on the box.</p>
+<div class="hs">
+<svg viewBox="0 0 720 380" role="img" aria-label="A box on the floor with four force arrows: gravity down, normal force up, applied push to the right, and friction to the left">
+<rect x="0" y="300" width="720" height="80" fill="#D9E7EC"/>
+<rect x="280" y="190" width="160" height="110" rx="6" fill="#B45309"/><rect x="300" y="210" width="120" height="16" rx="3" fill="#FCD34D"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0B1B2B"/></marker></defs>
+<g stroke="#0B1B2B" stroke-width="5" marker-end="url(#ah)"><path d="M360 245v105"/><path d="M360 245V95"/><path d="M360 245h200"/><path d="M360 245H180"/></g>
+<circle cx="360" cy="245" r="7" fill="#0B1B2B"/>
+</svg>
+<button class="dot" type="button" style="left:50%;top:22%" data-hs="0" aria-expanded="false" aria-controls="hs-panel">1<span class="sr"> Normal force</span></button>
+<button class="dot" type="button" style="left:50%;top:94%" data-hs="1" aria-expanded="false" aria-controls="hs-panel">2<span class="sr"> Gravity</span></button>
+<button class="dot" type="button" style="left:80%;top:64%" data-hs="2" aria-expanded="false" aria-controls="hs-panel">3<span class="sr"> Applied force</span></button>
+<button class="dot" type="button" style="left:22%;top:64%" data-hs="3" aria-expanded="false" aria-controls="hs-panel">4<span class="sr"> Friction</span></button>
+</div>
+<div class="hs-panel" id="hs-panel" aria-live="polite"><p style="margin:0;color:var(--mute)">Select a marker to see the force it shows.</p></div>
+<p class="count" id="hscount">0 of 4 forces explored</p>
+<div class="gate"><button class="btn" type="button" data-unlock="s-sort" id="hsgate" disabled>Explore all four forces to continue</button></div>
+</div>
+</section>
+
+<!-- 5 sort -->
+<section class="block locked" id="s-sort" data-step>
+<div class="col">
+<p class="label">Apply</p>
+<h2>Which law is it?</h2>
+<p>Sort each situation into the law that best explains it. Select a card, then select the law it belongs to. You can also drag cards on a computer.</p>
+<div class="pool" id="pool" aria-label="Situations to sort"></div>
+<div class="bins">
+<div class="bin" data-bin="1"><button class="bin-h" type="button">Law 1: Inertia</button></div>
+<div class="bin" data-bin="2"><button class="bin-h" type="button">Law 2: F = m × a</button></div>
+<div class="bin" data-bin="3"><button class="bin-h" type="button">Law 3: Action and reaction</button></div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn" type="button" id="checksort">Check my sorting</button><button class="btn ghost" type="button" id="resetsort">Start over</button></div>
+<div class="fb" id="sortfb" aria-live="polite"></div>
+<div class="gate"><button class="btn" type="button" data-unlock="s-check" id="sortgate" disabled>Sort every card correctly to continue</button></div>
+</div>
+</section>
+
+<!-- 6 knowledge check -->
+<section class="block locked" id="s-check" data-step>
+<div class="col">
+<p class="label">Knowledge check</p>
+<h2>Check your understanding</h2>
+<p>Answer each question. You will get feedback right away, and you can try again.</p>
+<div id="quiz"></div>
+<p class="count" id="quizscore" aria-live="polite"></p>
+<div class="gate"><button class="btn" type="button" data-unlock="s-done" id="quizgate" disabled>Answer all three correctly to finish</button></div>
+</div>
+</section>
+
+<!-- 7 done -->
+<section class="block locked" id="s-done" data-step>
+<div class="col">
+<div class="done">
+<svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="34" fill="#EA580C"/><path d="M22 37l10 10 18-20" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<h2 style="margin:16px 0 8px">Lesson complete</h2>
+<p style="margin:0">You predicted, tested and explained how forces change motion.</p>
+</div>
+<h3 style="margin-top:32px">Key takeaways</h3>
+<details open><summary>Law 1: objects resist changes in motion</summary><p>Without a net force, a still object stays still and a moving object keeps moving at the same speed and direction.</p></details>
+<details><summary>Law 2: a = F ÷ m</summary><p>Double the net force and the acceleration doubles. Double the mass and the acceleration halves.</p></details>
+<details><summary>Law 3: forces come in pairs</summary><p>The pair acts on two different objects, so the forces do not cancel each other out.</p></details>
+<div class="note" style="margin-top:24px"><b>Up next:</b> Lesson 4, Friction and Terminal Velocity.</div>
+</div>
+</section>
+</main>
+<footer>Portfolio sample lesson with original content, built in the style of the interactive high school science courses I designed. It targets NGSS performance expectation HS-PS2-1: using data to show that Newton's second law relates net force, mass and acceleration.</footer>
+
+<script>
+(function(){
+var steps=[].slice.call(document.querySelectorAll('[data-step]'));
+function progress(){var open=steps.filter(function(s){return !s.classList.contains('locked')}).length;var p=Math.round((open-1)/(steps.length-1)*100);if(document.getElementById('s-done').classList.contains('locked')===false)p=100;document.getElementById('progbar').style.width=p+'%';document.getElementById('pct').textContent=p+'% complete'}
+function unlock(id){var s=document.getElementById(id);if(!s)return;s.classList.remove('locked');progress();setTimeout(function(){s.scrollIntoView({behavior:'smooth',block:'start'});var h=s.querySelector('h2');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true})}},30)}
+document.querySelectorAll('[data-unlock]').forEach(function(b){b.addEventListener('click',function(){if(b.disabled)return;unlock(b.getAttribute('data-unlock'));b.parentNode.style.display='none'})});
+progress();
+// hook reveal
+var hb=document.getElementById('hook-btn');hb.addEventListener('click',function(){var a=document.getElementById('hook-ans');a.hidden=!a.hidden;hb.setAttribute('aria-expanded',String(!a.hidden));hb.textContent=a.hidden?'Reveal the idea':'Hide the idea'});
+// flips
+var flipped=new Set();document.querySelectorAll('.flip').forEach(function(f,i){f.addEventListener('click',function(){var on=f.getAttribute('aria-pressed')!=='true';f.setAttribute('aria-pressed',String(on));flipped.add(i);document.getElementById('flipcount').textContent=flipped.size+' of 3 cards flipped';if(flipped.size===3){var g=document.getElementById('flipgate');g.disabled=false;g.textContent='Continue'}})});
+// prediction
+var pred=null;document.getElementById('lock-pred').addEventListener('click',function(){var c=document.querySelector('input[name=pr]:checked');var fb=document.getElementById('pred-fb');if(!c){fb.className='fb info show';fb.textContent='Choose an answer first.';return}pred=c.value;document.querySelectorAll('input[name=pr]').forEach(function(r){r.disabled=true});this.disabled=true;fb.className='fb info show';fb.textContent='Prediction saved. Now test it in the lab below.';document.getElementById('sim').hidden=false;document.getElementById('formula').hidden=false;document.getElementById('sim-task').hidden=false});
+// sim
+var F=document.getElementById('force'),M=document.getElementById('mass'),cart=document.getElementById('cart'),arrow=document.getElementById('farrow'),runs=0,raf=null,tested={};
+function acc(){return (+F.value)/(+M.value)}
+function upd(){document.getElementById('fo').textContent=F.value+' N';document.getElementById('mo').textContent=M.value+' kg';document.getElementById('ra').textContent=acc().toFixed(1);arrow.style.width=Math.max(6,+F.value*1.2)+'px';var m=+M.value;document.getElementById('load1').style.opacity=m>=20?1:0;document.getElementById('load2').style.opacity=m>=35?1:0}
+F.addEventListener('input',upd);M.addEventListener('input',upd);upd();
+function reset(){if(raf)cancelAnimationFrame(raf);cart.style.transform='translateX(0)';document.getElementById('rv').textContent='0.0';document.getElementById('rd').textContent='0.0'}
+document.getElementById('reset').addEventListener('click',reset);
+document.getElementById('run').addEventListener('click',function(){reset();var a=acc(),T=3,start=null,track=cart.parentNode.clientWidth-120,maxD=25;var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(ts){if(start===null)start=ts;var t=Math.min((ts-start)/1000,T);var d=0.5*a*t*t;cart.style.transform='translateX('+Math.min(track,d/maxD*track)+'px)';document.getElementById('rv').textContent=(a*t).toFixed(1);document.getElementById('rd').textContent=d.toFixed(1);if(t<T&&!reduce)raf=requestAnimationFrame(frame);else{var D=0.5*a*T*T;cart.style.transform='translateX('+Math.min(track,D/maxD*track)+'px)';document.getElementById('rv').textContent=(a*T).toFixed(1);document.getElementById('rd').textContent=D.toFixed(1);done()}}
+raf=requestAnimationFrame(frame);
+function done(){runs++;tested[F.value+'|'+M.value]=1;if(runs>=2){var g=document.getElementById('simgate');g.disabled=false;g.textContent='Continue';var fb=document.getElementById('pred-fb');fb.className='fb show '+(pred==='c'?'good':'bad');fb.innerHTML=pred==='c'?'<b>Your prediction was right.</b> Doubling the force doubled the acceleration, because a = F ÷ m.':'<b>Look again at your results.</b> When the force doubled, the acceleration doubled too. The correct prediction was 4 m/s², because a = F ÷ m.'}}});
+// hotspots
+var HS=[['Normal force (up)','The floor pushes up on the box. It balances gravity, so the box does not sink into the floor or float up.'],['Gravity (down)','Earth pulls the box down. Its size is the weight: mass × 9.8 m/s². A 20 kg box has a weight of about 196 N.'],['Applied force (right)','The student pushes the box to the right. If this push is bigger than friction, there is a net force and the box speeds up (Law 2).'],['Friction (left)','The floor resists the sliding motion. Friction always acts opposite to the direction the box moves or tries to move.']];
+var seen=new Set();document.querySelectorAll('.dot').forEach(function(d){d.addEventListener('click',function(){var i=+d.getAttribute('data-hs');document.querySelectorAll('.dot').forEach(function(o){o.setAttribute('aria-expanded','false')});d.setAttribute('aria-expanded','true');d.classList.add('seen');seen.add(i);var p=document.getElementById('hs-panel');p.innerHTML='<h3 style="margin:0 0 6px;color:var(--teal-d)">'+(i+1)+'. '+HS[i][0]+'</h3><p style="margin:0">'+HS[i][1]+'</p>';document.getElementById('hscount').textContent=seen.size+' of 4 forces explored';if(seen.size===4){var g=document.getElementById('hsgate');g.disabled=false;g.textContent='Continue'}})});
+// sort
+var CARDS=[['A passenger lurches forward when a car stops suddenly.',1],['A soccer ball stays still on the grass until someone kicks it.',1],['A heavier bowling ball needs a harder push to roll as fast as a lighter one.',2],['A tennis racket swung harder sends the ball off faster.',2],['A rocket pushes gas down, and the gas pushes the rocket up.',3],['When you jump off a small boat, the boat moves backward.',3]];
+var pool=document.getElementById('pool'),sel=null,dragEl=null;
+function mk(){pool.innerHTML='';document.querySelectorAll('.bin .chip').forEach(function(c){c.remove()});var order=[4,0,2,5,1,3];order.forEach(function(i){var c=document.createElement('button');c.type='button';c.className='chip';c.textContent=CARDS[i][0];c.dataset.law=CARDS[i][1];c.setAttribute('aria-pressed','false');c.draggable=true;c.addEventListener('click',function(){if(sel===c){sel=null;c.setAttribute('aria-pressed','false');return}if(sel)sel.setAttribute('aria-pressed','false');sel=c;c.setAttribute('aria-pressed','true')});c.addEventListener('dragstart',function(e){dragEl=c;try{e.dataTransfer.setData('text/plain','x')}catch(err){}});pool.appendChild(c)});var fb=document.getElementById('sortfb');fb.className='fb';fb.textContent=''}
+function place(bin,c){c.classList.remove('ok','no');c.setAttribute('aria-pressed','false');bin.appendChild(c);sel=null}
+document.querySelectorAll('.bin').forEach(function(b){b.querySelector('.bin-h').addEventListener('click',function(){if(sel)place(b,sel)});b.addEventListener('dragover',function(e){e.preventDefault();b.classList.add('over')});b.addEventListener('dragleave',function(){b.classList.remove('over')});b.addEventListener('drop',function(e){e.preventDefault();b.classList.remove('over');if(dragEl)place(b,dragEl);dragEl=null})});
+pool.addEventListener('click',function(e){if(e.target===pool&&sel){pool.appendChild(sel);sel.setAttribute('aria-pressed','false');sel=null}});
+document.getElementById('resetsort').addEventListener('click',mk);
+document.getElementById('checksort').addEventListener('click',function(){var fb=document.getElementById('sortfb');var left=pool.querySelectorAll('.chip').length;if(left){fb.className='fb info show';fb.textContent='Place all six cards first. '+left+' left to sort.';return}var right=0;document.querySelectorAll('.bin').forEach(function(b){b.querySelectorAll('.chip').forEach(function(c){var ok=c.dataset.law===b.dataset.bin;c.classList.toggle('ok',ok);c.classList.toggle('no',!ok);if(ok)right++})});if(right===6){fb.className='fb good show';fb.innerHTML='<b>All six are correct.</b> You can spot each law in everyday life.';var g=document.getElementById('sortgate');g.disabled=false;g.textContent='Continue'}else{fb.className='fb bad show';fb.innerHTML='<b>'+right+' of 6 correct.</b> Cards in red are in the wrong group. Hint: ask yourself whether the example is about resisting change (Law 1), how much something speeds up (Law 2), or a pair of pushes (Law 3). Select a red card to move it.'}});
+mk();
+// quiz
+var Q=[{q:'A 2 kg ball is pushed with a net force of 10 N. What is its acceleration?',o:[['20 m/s²','That would be force × mass. Acceleration is force divided by mass.'],['5 m/s²','Correct. a = F ÷ m = 10 N ÷ 2 kg = 5 m/s².',1],['12 m/s²','Force and mass are not added. Use a = F ÷ m.'],['0.2 m/s²','That is mass ÷ force. Flip it: a = F ÷ m.']]},{q:'A hockey puck slides across smooth ice and keeps going for a long time. Which law best explains this?',o:[['Law 1: inertia','Correct. With almost no friction, there is almost no net force, so the puck keeps moving.',1],['Law 2: F = m × a','Law 2 explains how much something accelerates. Here the puck is barely changing its motion at all.'],['Law 3: action and reaction','Law 3 is about force pairs. The key idea here is the puck continuing its motion.']]},{q:'A truck and a small car collide. During the crash, how do the forces they exert on each other compare?',o:[['The truck pushes harder on the car','It feels that way because the car is damaged more, but the forces are equal.'],['The car pushes harder on the truck','Law 3 says the forces are equal and opposite.'],['The forces are equal and opposite','Correct. Law 3: the forces are equal. The car accelerates more because it has less mass (Law 2).',1]]}];
+var quiz=document.getElementById('quiz'),solved=new Set();
+Q.forEach(function(item,qi){var d=document.createElement('div');d.className='q';var h='<fieldset><legend>'+(qi+1)+'. '+item.q+'</legend>';item.o.forEach(function(o,oi){h+='<label class="opt"><input type="radio" name="q'+qi+'" value="'+oi+'"> '+o[0]+'</label>'});h+='</fieldset><button class="btn" type="button" style="margin-top:8px">Submit</button><div class="fb" aria-live="polite"></div>';d.innerHTML=h;quiz.appendChild(d);
+d.querySelector('button').addEventListener('click',function(){var c=d.querySelector('input:checked'),fb=d.querySelector('.fb');d.querySelectorAll('.opt').forEach(function(l){l.classList.remove('right','wrong')});if(!c){fb.className='fb info show';fb.textContent='Choose an answer first.';return}var o=item.o[+c.value],ok=!!o[2];c.closest('.opt').classList.add(ok?'right':'wrong');fb.className='fb show '+(ok?'good':'bad');fb.textContent=o[1];if(ok){solved.add(qi);d.querySelectorAll('input').forEach(function(r){r.disabled=true});this.disabled=true}document.getElementById('quizscore').textContent=solved.size+' of 3 answered correctly';if(solved.size===3){var g=document.getElementById('quizgate');g.disabled=false;g.textContent='Finish lesson'}})});
+})();
+</script>
+<a href="science-case-study.html" style="position:fixed;bottom:16px;left:16px;background:#0B3A4C;color:#fff;font:600 13px/1 Inter,sans-serif;padding:12px 16px;border-radius:999px;text-decoration:none">← Case study</a>
+</body>
+</html>
