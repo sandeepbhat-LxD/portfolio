@@ -332,6 +332,7 @@ Q.forEach(function(item,qi){var d=document.createElement('div');d.className='q';
 d.querySelector('button').addEventListener('click',function(){var c=d.querySelector('input:checked'),fb=d.querySelector('.fb');d.querySelectorAll('.opt').forEach(function(l){l.classList.remove('right','wrong')});if(!c){fb.className='fb info show';fb.textContent='Choose an answer first.';return}var o=item.o[+c.value],ok=!!o[2];c.closest('.opt').classList.add(ok?'right':'wrong');fb.className='fb show '+(ok?'good':'bad');fb.textContent=o[1];if(ok){solved.add(qi);d.querySelectorAll('input').forEach(function(r){r.disabled=true});this.disabled=true}document.getElementById('quizscore').textContent=solved.size+' of 3 answered correctly';if(solved.size===3){var g=document.getElementById('quizgate');g.disabled=false;g.textContent='Finish lesson'}})});
 })();
 </script>
-<a href="science-case-study.html" style="position:fixed;bottom:16px;left:16px;background:#0B3A4C;color:#fff;font:600 13px/1 Inter,sans-serif;padding:12px 16px;border-radius:999px;text-decoration:none">← Case study</a>
+<a id="cslink" href="science-case-study.html" style="display:none;position:fixed;bottom:16px;left:16px;background:#0B3A4C;color:#fff;font:600 13px/1 Inter,sans-serif;padding:12px 16px;border-radius:999px;text-decoration:none">← Case study</a>
+<script>if(/from=cs/.test(location.search))document.getElementById("cslink").style.display="block"</script>
 </body>
 </html>

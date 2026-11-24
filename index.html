@@ -260,7 +260,6 @@ section{padding:30px 0}.sh{padding-top:14px;padding-bottom:22px}.hero{padding-to
 <section id="work"><div class="wrap sh rv"><h2 class="st">Work</h2></div>
 <div class="wrap">
 <div class="grid">
-<button class="tile rv" type="button" data-open="nl"><span class="cover"><img src="science/lesson.jpg" alt="" width="1067" height="600" loading="lazy"><span class="cta">Open lesson</span></span><span class="cap">Forces in Motion: Newton's Three Laws</span><span class="tags">Interactive physics lesson · live sample · K–12 science</span></button>
 <button class="tile rv" type="button" data-open="rl"><span class="cover"><img id="cov-rl" alt="" width="1067" height="600"><span class="cta">Open folder</span></span><span class="cap">Articulate Studio</span><span class="tags">Lessons · AI avatar intro</span></button>
 <button class="tile rv" type="button" data-open="sb"><span class="cover"><img id="cov-sb" alt="" width="1067" height="600"><span class="cta">Open folder</span></span><span class="cap">Facilitator Guides</span><span class="tags">2 guides · facilitator notes with SAY / DO / ASK · fictional content</span></button>
 <button class="tile rv" type="button" data-open="cs"><span class="cover" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px"><img src="solax/cover.jpg" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy"><img src="bus/coach-orange.jpg" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy"><img id="cs-a" alt="" style="width:100%;height:100%;object-fit:cover"><span class="cta">Open the folder</span></span><span class="cap">Case Studies</span><span class="tags">Micro-learning · K–12 science · Learning ecosystem · Web design</span></button>
@@ -409,12 +408,13 @@ section{padding:30px 0}.sh{padding-top:14px;padding-bottom:22px}.hero{padding-to
 </dialog>
 <dialog id="rl" aria-label="Articulate Studio folder">
 <div class="dh"><h3>Articulate Studio</h3><button class="x" type="button" data-close>Close</button></div>
-<p class="dmeta">Three pieces built with Articulate Rise. Choose one to open it.</p>
+<p class="dmeta">Four pieces built for e-learning. Choose one to open it.</p>
 <aside role="note" style="margin:0 0 18px;padding:12px 16px;border-left:3px solid currentColor;background:rgba(127,127,127,.09);font-size:.92em;line-height:1.55"><b>Confidentiality notice.</b> All of the learning content I develop is created for clients and is strictly confidential, so none of the original work can be shown. The items here are mockups, built with fictional scenarios, names and data, to demonstrate my approach and skills for portfolio purposes only. They are not client deliverables and do not contain client information.</aside>
 <div class="decks">
 <button class="deck" type="button" data-rlo="rl2"><img id="rl-a" alt="" width="1067" height="600"><span class="cap">Interactive Lesson</span><span class="tags">Rise-style mockup of a real client programme</span></button>
 <button class="deck" type="button" data-rlo="rl3"><img id="rl-b" alt="" width="1067" height="600" src="articulate/avatar-poster.jpg"><span class="cap">Avatar creation using the in-built AI model of Rise</span><span class="tags">30-second AI presenter intro</span></button>
 <button class="deck" type="button" data-rlo="rl4"><img alt="" width="1067" height="600" src="articulate/network-cover.jpg"><span class="cap">Network Administration: Rise-style lesson</span><span class="tags">Introduction · 2 sections · knowledge check · summary</span></button>
+<button class="deck" type="button" data-rlo="rl5"><img alt="" width="1067" height="600" src="science/lesson.jpg"><span class="cap">Forces in Motion: Newton's Three Laws</span><span class="tags">Interactive physics lesson · live sample</span></button>
 </div>
 </dialog>
 <dialog id="rl2" aria-label="Articulate Studio: interactive lesson">
@@ -438,12 +438,18 @@ section{padding:30px 0}.sh{padding-top:14px;padding-bottom:22px}.hero{padding-to
 <p><b>How it was built:</b> I scripted the opening lines in plain, spoken language, picked an avatar and a workplace setting, generated the clip with Rise's AI model and kept the first 30 seconds so it works as a short hook. For this portfolio, all client branding in the footage has been masked.</p>
 <p><b>Why it works:</b> a short on-screen presenter builds familiarity and sets the tone before the learner reaches the content. It also removes the cost of a studio shoot or voice talent, and the script can be changed and regenerated in minutes.</p></div>
 </dialog>
+<dialog id="rl5" aria-label="Forces in Motion: Newton's Three Laws">
+<p style="margin:0 0 12px"><button class="x" type="button" data-rlback>← Articulate Studio</button></p>
+<div class="dh"><h3>Forces in Motion: Newton's Three Laws</h3><button class="x" type="button" data-close>Close</button></div>
+<p class="dmeta">A live sample physics lesson with original content, built in the style of the interactive science courses I designed. Try every activity: flip cards, a force-and-mass lab, a free-body diagram, a sorting task and a knowledge check. <a href="newtons-laws-lesson.html" target="_blank" rel="noopener noreferrer">Open full screen</a></p>
+<iframe id="rlf3" title="Forces in Motion: Newton's Three Laws" style="display:block;width:100%;height:76vh;min-height:420px;border:1px solid var(--line,#d3e0e8);background:#fff"></iframe>
+</dialog>
 <script>
-(function(){var d=document.getElementById('rl'),l=document.getElementById('rl2'),n=document.getElementById('rl4'),f2=document.getElementById('rlf2'),v=document.getElementById('rl3'),vid=document.getElementById('rlv'),f=document.getElementById('rlf');
+(function(){var d=document.getElementById('rl'),l=document.getElementById('rl2'),n=document.getElementById('rl4'),f2=document.getElementById('rlf2'),v=document.getElementById('rl3'),l5=document.getElementById('rl5'),vid=document.getElementById('rlv'),f=document.getElementById('rlf');
 function op(x){if(x.showModal)x.showModal();else x.setAttribute('open','')}
 document.getElementById('rl-a').src=document.getElementById('cov-rl').src;
-d.querySelectorAll('[data-rlo]').forEach(function(b){b.onclick=function(){var t=document.getElementById(b.getAttribute('data-rlo'));d.close();if(t===l&&!f.getAttribute('src'))f.src='rise-lesson.html';if(t===n&&!f2.getAttribute('src'))f2.src='rise-network.html';op(t)}});
-[l,v,n].forEach(function(x){x.querySelectorAll('[data-rlback]').forEach(function(b){b.onclick=function(){x.close();op(d)}});x.addEventListener('click',function(e){if(e.target===x)x.close()});x.addEventListener('close',function(){if(vid)vid.pause()})});
+d.querySelectorAll('[data-rlo]').forEach(function(b){b.onclick=function(){var t=document.getElementById(b.getAttribute('data-rlo'));d.close();if(t===l&&!f.getAttribute('src'))f.src='rise-lesson.html';if(t===n&&!f2.getAttribute('src'))f2.src='rise-network.html';if(t===l5){var f3=document.getElementById('rlf3');if(!f3.getAttribute('src'))f3.src='newtons-laws-lesson.html'}op(t)}});
+[l,v,n,l5].forEach(function(x){x.querySelectorAll('[data-rlback]').forEach(function(b){b.onclick=function(){x.close();op(d)}});x.addEventListener('click',function(e){if(e.target===x)x.close()});x.addEventListener('close',function(){if(vid)vid.pause()})});
 d.addEventListener('click',function(e){if(e.target===d)d.close()});})();
 </script>
 <dialog id="rp" aria-label="Interactive Rise panels">
@@ -772,11 +778,6 @@ d.querySelector('[data-tmback]').onclick=function(){d.close();op(f)};
 <div class="dh"><h3>Making High School Science Hands-On, Fully Online</h3><button class="x" type="button" data-close>Close</button></div>
 <p class="dmeta">A case study on rebuilding US high school physics, biology and physical education courses as interactive, standards-aligned lessons: the client, my role, the design approach and a live sample lesson. <a href="science-case-study.html" target="_blank" rel="noopener noreferrer">Open full screen</a></p>
 <iframe id="scf" title="Making High School Science Hands-On, Fully Online" style="display:block;width:100%;height:76vh;min-height:420px;border:1px solid var(--line,#d3e0e8);background:#fff"></iframe>
-</dialog>
-<dialog id="nl" aria-label="Forces in Motion: Newton's Three Laws">
-<div class="dh"><h3>Forces in Motion: Newton's Three Laws</h3><button class="x" type="button" data-close>Close</button></div>
-<p class="dmeta">A live sample physics lesson with original content, built in the style of the interactive science courses I designed. Try every activity: flip cards, a force-and-mass lab, a free-body diagram, a sorting task and a knowledge check. <a href="newtons-laws-lesson.html" target="_blank" rel="noopener noreferrer">Open full screen</a></p>
-<iframe id="nlf" src="newtons-laws-lesson.html" title="Forces in Motion: Newton's Three Laws" style="display:block;width:100%;height:76vh;min-height:420px;border:1px solid var(--line,#d3e0e8);background:#fff"></iframe>
 </dialog>
 <script>(function(){var c=document.getElementById('cs'),m=document.getElementById('mj'),b=document.getElementById('bl'),x2=document.getElementById('sx'),sc=document.getElementById('sc'),im=document.querySelector('#mj .mjimg');
 function op(d){if(d.showModal)d.showModal();else d.setAttribute('open','')}
