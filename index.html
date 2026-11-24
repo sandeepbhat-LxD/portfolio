@@ -262,7 +262,7 @@ section{padding:30px 0}.sh{padding-top:14px;padding-bottom:22px}.hero{padding-to
 <div class="grid">
 <button class="tile rv" type="button" data-open="rl"><span class="cover"><img id="cov-rl" alt="" width="1067" height="600"><span class="cta">Open folder</span></span><span class="cap">Articulate Studio</span><span class="tags">Lessons · AI avatar intro</span></button>
 <button class="tile rv" type="button" data-open="sb"><span class="cover"><img id="cov-sb" alt="" width="1067" height="600"><span class="cta">Open folder</span></span><span class="cap">Facilitator Guides</span><span class="tags">2 guides · facilitator notes with SAY / DO / ASK · fictional content</span></button>
-<button class="tile rv" type="button" data-open="cs"><span class="cover" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px"><img src="solax/cover.jpg" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy"><img src="bus/coach-orange.jpg" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy"><img id="cs-a" alt="" style="width:100%;height:100%;object-fit:cover"><span class="cta">Open the folder</span></span><span class="cap">Case Studies</span><span class="tags">Mobile micro-learning · Learning ecosystem · Web design</span></button>
+<button class="tile rv" type="button" data-open="cs"><span class="cover" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px"><img src="solax/cover.jpg" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy"><img src="bus/coach-orange.jpg" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy"><img id="cs-a" alt="" style="width:100%;height:100%;object-fit:cover"><span class="cta">Open the folder</span></span><span class="cap">Case Studies</span><span class="tags">Micro-learning · K–12 science · Learning ecosystem · Web design</span></button>
 <button class="tile rv" type="button" data-open="rp"><span class="cover rpcover" aria-hidden="true"><span class="rpc"><b>Rise</b> interactive panels<em>7 panels · live preview · copy the HTML</em></span><span class="cta">Try the panels</span></span><span class="cap">Interactive Rise Panels</span><span class="tags">7 reusable HTML blocks · sort, branch, hotspots, chat, flip cards</span></button>
 <button class="tile rv" type="button" data-open="vy"><span class="cover"><img id="cov-vy" alt="" width="1067" height="600"><span class="cta">Watch the videos</span></span><span class="cap">Vyond Videos</span><span class="tags">Animated analogies embedded in Rise lessons</span></button>
 <button class="tile rv" type="button" data-open="sd"><span class="cover split"><img id="cov-deck" alt="" width="800" height="450"><img id="cov-bloom" alt="" width="960" height="541"><span class="cta">Open folder</span></span><span class="cap">Slide Stories</span><span class="tags">3 decks · Training Needs Analysis, Instructional Design frameworks, troubleshooting guide</span></button>
@@ -562,9 +562,11 @@ d.addEventListener('click',function(e){if(e.target===d)d.close()});})();
 </dialog>
 <dialog id="cs" aria-label="Case studies folder">
 <div class="dh"><h3>Case Studies</h3><button class="x" type="button" data-close>Close</button></div>
-<p class="dmeta">Three case studies. Choose one to open it.</p>
+<p class="dmeta">Five case studies and samples. Choose one to open it.</p>
 <div class="decks">
 <button class="deck" type="button" data-cso="sx"><img src="solax/cover.jpg" alt="" width="1067" height="600" loading="lazy"><span class="cap">SOLAx: Keeping Afghan Girls Learning</span><span class="tags">Mobile micro-learning case study · WhatsApp chatbot</span></button>
+<button class="deck" type="button" data-cso="sc"><img src="science/cover.jpg" alt="" width="1067" height="600" loading="lazy"><span class="cap">Making High School Science Hands-On, Fully Online</span><span class="tags">K–12 interactive science courses · case study</span></button>
+<button class="deck" type="button" data-cso="nl"><img src="science/lesson.jpg" alt="" width="1067" height="600" loading="lazy"><span class="cap">Forces in Motion: Newton's Three Laws</span><span class="tags">Interactive physics lesson · live sample</span></button>
 <button class="deck" type="button" data-cso="bl"><img src="bus/coach-orange.jpg" alt="" width="1400" height="790" loading="lazy"><span class="cap">Digital Learning Ecosystem</span><span class="tags">Concept case study · interactive training demo</span></button>
 <button class="deck" type="button" data-cso="mj"><img id="cs-b" alt="" width="800" height="600"><span class="cap">Mangala Jewels: Jewellery Website Design</span><span class="tags">Web design, wireframes, e-commerce concept</span></button>
 </div>
@@ -765,12 +767,24 @@ d.querySelector('[data-tmback]').onclick=function(){d.close();op(f)};
 <p class="dmeta">A case study on turning the Afghan grade 7–12 curriculum into chat-based micro-lessons for girls learning on a family phone: the challenge, my role, the design approach, module anatomy, concept screens and outcomes. The screens are concept mockups, not the production interface. <a href="solax-case-study.html" target="_blank" rel="noopener noreferrer">Open full screen</a></p>
 <iframe id="sxf" title="SOLAx case study" style="display:block;width:100%;height:76vh;min-height:420px;border:1px solid var(--line,#d3e0e8);background:#fff"></iframe>
 </dialog>
-<script>(function(){var c=document.getElementById('cs'),m=document.getElementById('mj'),b=document.getElementById('bl'),x2=document.getElementById('sx'),im=document.querySelector('#mj .mjimg');
+<dialog id="sc" aria-label="Making High School Science Hands-On, Fully Online">
+<p style="margin:0 0 12px"><button class="x" type="button" data-csback>← Case Studies</button></p>
+<div class="dh"><h3>Making High School Science Hands-On, Fully Online</h3><button class="x" type="button" data-close>Close</button></div>
+<p class="dmeta">A case study on rebuilding US high school physics, biology and physical education courses as interactive, standards-aligned lessons: the client, my role, the design approach and a live sample lesson. <a href="science-case-study.html" target="_blank" rel="noopener noreferrer">Open full screen</a></p>
+<iframe id="scf" title="Making High School Science Hands-On, Fully Online" style="display:block;width:100%;height:76vh;min-height:420px;border:1px solid var(--line,#d3e0e8);background:#fff"></iframe>
+</dialog>
+<dialog id="nl" aria-label="Forces in Motion: Newton's Three Laws">
+<p style="margin:0 0 12px"><button class="x" type="button" data-csback>← Case Studies</button></p>
+<div class="dh"><h3>Forces in Motion: Newton's Three Laws</h3><button class="x" type="button" data-close>Close</button></div>
+<p class="dmeta">A live sample physics lesson with original content, built in the style of the interactive science courses I designed. Try every activity: flip cards, a force-and-mass lab, a free-body diagram, a sorting task and a knowledge check. <a href="newtons-laws-lesson.html" target="_blank" rel="noopener noreferrer">Open full screen</a></p>
+<iframe id="nlf" title="Forces in Motion: Newton's Three Laws" style="display:block;width:100%;height:76vh;min-height:420px;border:1px solid var(--line,#d3e0e8);background:#fff"></iframe>
+</dialog>
+<script>(function(){var c=document.getElementById('cs'),m=document.getElementById('mj'),b=document.getElementById('bl'),x2=document.getElementById('sx'),sc=document.getElementById('sc'),nl=document.getElementById('nl'),im=document.querySelector('#mj .mjimg');
 function op(d){if(d.showModal)d.showModal();else d.setAttribute('open','')}
 document.querySelectorAll('[data-close]').forEach(function(x){if(!x.onclick)x.onclick=function(){x.closest('dialog').close()}});
 if(im){var u=im.getAttribute('src');document.getElementById('cs-a').src=u;document.getElementById('cs-b').src=u}
-c.querySelectorAll('[data-cso]').forEach(function(x){x.onclick=function(){c.close();var t=document.getElementById(x.getAttribute('data-cso'));op(t);if(t===b){var f=document.getElementById('blf');if(!f.getAttribute('src'))f.src='bus-case-study.html'}if(t===x2){var q=document.getElementById('sxf');if(!q.getAttribute('src'))q.src='solax-case-study.html'}if(t===m){var g=document.getElementById('mjf');if(!g.getAttribute('src'))g.src='mangala-design.html'}}});
-[m,b,x2].forEach(function(d){d.querySelector('[data-csback]').onclick=function(){d.close();op(c)}});
+c.querySelectorAll('[data-cso]').forEach(function(x){x.onclick=function(){c.close();var t=document.getElementById(x.getAttribute('data-cso'));op(t);if(t===b){var f=document.getElementById('blf');if(!f.getAttribute('src'))f.src='bus-case-study.html'}if(t===x2){var q=document.getElementById('sxf');if(!q.getAttribute('src'))q.src='solax-case-study.html'}if(t===sc){var q1=document.getElementById('scf');if(!q1.getAttribute('src'))q1.src='science-case-study.html'}if(t===nl){var q2=document.getElementById('nlf');if(!q2.getAttribute('src'))q2.src='newtons-laws-lesson.html'}if(t===m){var g=document.getElementById('mjf');if(!g.getAttribute('src'))g.src='mangala-design.html'}}});
+[m,b,x2,sc,nl].forEach(function(d){d.querySelector('[data-csback]').onclick=function(){d.close();op(c)}});
 c.addEventListener('click',function(e){if(e.target===c)c.close()});
 })();</script>
 <script>(function(){
